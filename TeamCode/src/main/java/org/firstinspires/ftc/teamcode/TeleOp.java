@@ -28,7 +28,7 @@ public class TeleOp extends LinearOpMode {
         motor3 = hardwareMap.get(DcMotor.class,"back left"); //backleft, port 3
         motor4 = hardwareMap.get(DcMotor.class,"back right");  //backright, port 2
         motor5 = hardwareMap.get(DcMotor.class, "arm");
-        motor6 = hardwareMap.get(DcMotor.class, "arm r");
+        motor6 = hardwareMap.get(DcMotor.class, "arm t");
         // CRR = hardwareMap.get(CRServo.class, "CR1");
         // CRL = hardwareMap.get(CRServo.class, "CR2");
 
@@ -56,7 +56,7 @@ public class TeleOp extends LinearOpMode {
             double m3Power = (forwardMotion - horizonMotion + rotateMotion) / denominator;
             double m4Power = (forwardMotion - horizonMotion - rotateMotion) / denominator;
             double m5Power = gamepad2.right_stick_y;
-            double m6Power = gamepad2.right_stick_y/2;
+            double m6Power = gamepad2.right_stick_x;
 
             motor1.setPower(m1Power);
             motor2.setPower(m2Power);
