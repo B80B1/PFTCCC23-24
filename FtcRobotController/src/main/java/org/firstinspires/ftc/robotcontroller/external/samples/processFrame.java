@@ -1,4 +1,4 @@
-package org.wolfcorp.skystone;
+package org.firstinspires.ftc.robotcontroller.external.samples;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
