@@ -104,7 +104,7 @@ public class SkystoneDetector extends OpenCvPipeline {
         else if (!right) location = SkystoneLocation.RIGHT;
             // if both are true, then there's no Skystone in front.
             // since our team's camera can only detect two at a time
-            // we will need to scan the next 2 stones
+            // we will  need to scan the next 2 stones
         else location = SkystoneLocation.NONE;
 
         return mat; // return the mat with rectangles drawn
