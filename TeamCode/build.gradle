@@ -35,6 +35,6 @@ dependencies {
     implementation 'com.github.Eeshwar-Krishnan:PhotonFTC:v2.0.4'
     implementation 'org.openftc:easyopencv:1.7.0'
 
-    implementation "com.acmerobotics.roadrunner:ftc:0.1.7"
+    implementation "com.acmerobotics.roadrunner:ftc:0.1.8"
     implementation "com.acmerobotics.dashboard:dashboard:0.4.13"
 }
