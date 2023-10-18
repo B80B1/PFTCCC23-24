@@ -23,10 +23,10 @@ public class TeleOp extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        motor1 = hardwareMap.get(DcMotor.class,"front left"); //frontleft, port 0
-        motor2 = hardwareMap.get(DcMotor.class,"front right");  //frontright, port 1
-        motor3 = hardwareMap.get(DcMotor.class,"back left"); //backleft, port 3
-        motor4 = hardwareMap.get(DcMotor.class,"back right");  //backright, port 2
+        motor1 = hardwareMap.get(DcMotor.class,"leftFront"); //frontleft, port 0
+        motor2 = hardwareMap.get(DcMotor.class,"rightFront");  //frontright, port 1
+        motor3 = hardwareMap.get(DcMotor.class,"leftBack"); //backleft, port 3
+        motor4 = hardwareMap.get(DcMotor.class,"rightBack");  //backright, port 2
         motor5 = hardwareMap.get(DcMotor.class, "arm");
         motor6 = hardwareMap.get(DcMotor.class, "arm t");
         // CRR = hardwareMap.get(CRServo.class, "CR1");
