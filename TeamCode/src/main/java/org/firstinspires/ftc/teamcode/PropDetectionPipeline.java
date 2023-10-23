@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
-Skip to content
+/*Skip to content
         Using Gmail with screen readers
         Conversations
         0.7 GB of 15 GB used
         Terms · Privacy · Program Policies
         Last account activity: 0 minutes ago
         Details
-        package org.firstinspires.ftc.teamcode.CameraCode;
+        package org.firstinspires.ftc.teamcode.CameraCode;*/
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -237,5 +237,3 @@ public class PropDetectionPipeline implements VisionProcessor {
         UNFOUND;
     }
 }
-PropDetectionPipeline.java
-        Displaying PropDetectionPipeline.java.
