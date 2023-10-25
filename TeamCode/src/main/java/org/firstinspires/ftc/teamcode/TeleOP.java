@@ -78,11 +78,11 @@ public class TeleOP extends LinearOpMode {
                 SJW.setPower(0);
             }
             if (gamepad2.a) {
-                SC.setPower(-0.5);
+                SC.setPower(-0.25);
             } else if (gamepad2.b) {
-                SC.setPower(0.5);
+                SC.setPower(0.25);
             } else {
-                SC.setPower(0);
+                SC.setPower(-0.01);
             }
             if (gamepad2.dpad_up) {
                 PL.setPosition(-96);
