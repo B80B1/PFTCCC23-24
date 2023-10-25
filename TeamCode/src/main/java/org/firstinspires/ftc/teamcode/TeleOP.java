@@ -20,22 +20,22 @@ public class TeleOP extends LinearOpMode {
     private CRServo SJW;
     private CRServo SC;
     private Servo PL;
+
     @Override
     public void runOpMode() {
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        motor1 = hardwareMap.get(DcMotor.class,"leftFront"); //frontleft, port 0
-        motor2 = hardwareMap.get(DcMotor.class,"rightFront");  //frontright, port 1
-        motor3 = hardwareMap.get(DcMotor.class,"leftBack"); //backleft, port 3
-        motor4 = hardwareMap.get(DcMotor.class,"rightBack");  //backright, port 2
+        motor1 = hardwareMap.get(DcMotor.class, "leftFront"); //frontleft, port 0
+        motor2 = hardwareMap.get(DcMotor.class, "rightFront");  //frontright, port 1
+        motor3 = hardwareMap.get(DcMotor.class, "leftBack"); //backleft, port 3
+        motor4 = hardwareMap.get(DcMotor.class, "rightBack");  //backright, port 2
         motor5 = hardwareMap.get(DcMotor.class, "arm");
         motor6 = hardwareMap.get(DcMotor.class, "arm t");
         SJW = hardwareMap.get(CRServo.class, "wrist");
         SC = hardwareMap.get(CRServo.class, "claw");
-        PL =hardwareMap.get(Servo.class, "Plane J");
-
+        PL = hardwareMap.get(Servo.class, "Plane J");
 
 
         motor1.setDirection(DcMotor.Direction.FORWARD);
@@ -72,16 +72,17 @@ public class TeleOP extends LinearOpMode {
 
             if (gamepad2.right_bumper) {
                 SJW.setPower(1);
-            } else if (gamepad2.left_bumper){
+            } else if (gamepad2.left_bumper) {
                 SJW.setPower(-1);
             } else {
                 SJW.setPower(0);
-            } if (gamepad2.a) {
+            }
+            if (gamepad2.a) {
                 SC.setPower(-0.5);
             } else if (gamepad2.b) {
                 SC.setPower(0.5);
-                }
-            } if (gamepad2.dpad_up) {
+            }
+            if (gamepad2.dpad_up) {
                 PL.setPosition(-96);
             } else {
                 PL.setPosition(0);
@@ -98,3 +99,4 @@ public class TeleOP extends LinearOpMode {
 
         }
     }
+}
