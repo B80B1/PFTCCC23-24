@@ -18,7 +18,7 @@ public class TeleOP extends LinearOpMode {
     private DcMotor motor5 = null; //slide control right
     private DcMotor motor6 = null; //slide control left
     private CRServo SJW;
-    private Servo SC;
+    private CRServo SC;
     private Servo PL;
     @Override
     public void runOpMode() {
@@ -33,7 +33,7 @@ public class TeleOP extends LinearOpMode {
         motor5 = hardwareMap.get(DcMotor.class, "arm");
         motor6 = hardwareMap.get(DcMotor.class, "arm t");
         SJW = hardwareMap.get(CRServo.class, "wrist");
-        SC = hardwareMap.get(Servo.class, "claw");
+        SC = hardwareMap.get(CRServo.class, "claw");
         PL =hardwareMap.get(Servo.class, "Plane J");
 
 
@@ -77,9 +77,9 @@ public class TeleOP extends LinearOpMode {
             } else {
                 SJW.setPower(0);
             } if (gamepad2.a) {
-                SC.setPosition(-20);
+                SC.setPower(-0.5);
             } else if (gamepad2.b) {
-                SC.setPosition(0);
+                SC.setPower(0.5);
                 }
             } if (gamepad2.dpad_up) {
                 PL.setPosition(-96);
