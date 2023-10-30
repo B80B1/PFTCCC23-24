@@ -61,7 +61,7 @@ public class TeleOP extends LinearOpMode {
             double m3Power = (forwardMotion - horizonMotion + rotateMotion) / denominator;
             double m4Power = (forwardMotion - horizonMotion - rotateMotion) / denominator;
             double m5Power = gamepad2.right_stick_y;
-            double m6Power = gamepad2.right_trigger - gamepad2.left_trigger;
+            double m6Power = gamepad2.left_stick_y;
 
             motor1.setPower(m1Power);
             motor2.setPower(m2Power);
@@ -85,9 +85,7 @@ public class TeleOP extends LinearOpMode {
                 SC.setPower(-0.01);
             }
             if (gamepad2.dpad_up) {
-                PL.setPosition(-96);
-            } else {
-                PL.setPosition(0);
+                PL.setPosition(96);
             }
 
 
