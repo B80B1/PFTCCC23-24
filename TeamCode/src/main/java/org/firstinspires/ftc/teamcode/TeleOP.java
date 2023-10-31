@@ -67,8 +67,8 @@ public class TeleOP extends LinearOpMode {
             motor2.setPower(m2Power);
             motor3.setPower(m3Power);
             motor4.setPower(m4Power);
-            motor5.setPower((m5Power + 0.01)/2.0);
-            motor6.setPower((m6Power + 0.01)/2.0);
+            motor5.setPower((m5Power + 0.01));
+            motor6.setPower((m6Power + 0.01));
 
             if (gamepad2.right_bumper) {
                 SJW.setPower(1);
@@ -78,11 +78,11 @@ public class TeleOP extends LinearOpMode {
                 SJW.setPower(0);
             }
             if (gamepad2.a) {
-                SC.setPower(-0.25);
+                SC.setPower(-1);
             } else if (gamepad2.b) {
-                SC.setPower(0.25);
+                SC.setPower(0.5);
             } else {
-                SC.setPower(-0.01);
+                SC.setPower(0);
             }
             if (gamepad2.dpad_up) {
                 PL.setPosition(96);
@@ -91,9 +91,9 @@ public class TeleOP extends LinearOpMode {
 
             telemetry.addData("m5", motor5);
             telemetry.addData("m6", motor6);
-            //telemetry.addData("FM", forwardMotion);
-            //telemetry.addData("HM", horizonMotion);
-            //telemetry.addData("RM", rotateMotion);
+            telemetry.addData("FM", forwardMotion);
+            telemetry.addData("HM", horizonMotion);
+            telemetry.addData("RM", rotateMotion);
             telemetry.addData("Status", "Running");
             telemetry.update();
 
