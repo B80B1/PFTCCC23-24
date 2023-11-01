@@ -67,8 +67,8 @@ public class TeleOP extends LinearOpMode {
             motor2.setPower(m2Power);
             motor3.setPower(m3Power);
             motor4.setPower(m4Power);
-            motor5.setPower((m5Power + 0.01));
-            motor6.setPower((m6Power + 0.01));
+            motor5.setPower((m5Power + 0.01)*(3.0/4.0));
+            motor6.setPower((m6Power + 0.01)*(3.0/4.0));
 
             if (gamepad2.right_bumper) {
                 SJW.setPower(1);
@@ -77,12 +77,10 @@ public class TeleOP extends LinearOpMode {
             } else {
                 SJW.setPower(0);
             }
-            if (gamepad2.a) {
-                SC.setPower(-1);
-            } else if (gamepad2.b) {
-                SC.setPower(0.5);
+            if (gamepad2.b) {
+                SC.setPower(1);
             } else {
-                SC.setPower(-0.1);
+                SC.setPower(-1);
             }
             if (gamepad2.dpad_up) {
                 PL.setPosition(96);
