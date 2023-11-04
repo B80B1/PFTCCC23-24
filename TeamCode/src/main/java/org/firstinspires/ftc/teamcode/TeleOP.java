@@ -86,6 +86,8 @@ public class TeleOP extends LinearOpMode {
                 SC.setPosition(0.70);
             } else if (gamepad2.a){
                 SC.setPosition(0.30);
+            } else {
+                SC.setPosition(0.50);
             }
             if (gamepad2.dpad_up) {
                 PL.setPosition(96);
