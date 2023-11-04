@@ -79,7 +79,7 @@ public class TeleOP extends LinearOpMode {
             }
             if (gamepad2.b) {
                 SC.setPower(1);
-            } else if (gamepad2.a) {
+            } else if (gamepad2.a){
                 SC.setPower(0.5);
             } else {
                 SC.setPower(0);
