@@ -16,7 +16,7 @@ public class TeleOP extends LinearOpMode {
     private DcMotor motor3 = null;
     private DcMotor motor4 = null;
     private DcMotor motor5 = null; //slide control right
-    private DcMotor motor6 = null; //slide control left
+    //private DcMotor motor6 = null; //slide control left
     private CRServo SJW;
     private CRServo SC;
     private Servo PL;
@@ -32,7 +32,7 @@ public class TeleOP extends LinearOpMode {
         motor3 = hardwareMap.get(DcMotor.class, "leftBack"); //backleft, port 3
         motor4 = hardwareMap.get(DcMotor.class, "rightBack");  //backright, port 2
         motor5 = hardwareMap.get(DcMotor.class, "arm");
-        motor6 = hardwareMap.get(DcMotor.class, "arm t");
+        //motor6 = hardwareMap.get(DcMotor.class, "arm t");
         SJW = hardwareMap.get(CRServo.class, "wrist");
         SC = hardwareMap.get(CRServo.class, "claw");
         PL = hardwareMap.get(Servo.class, "Plane J");
@@ -68,7 +68,7 @@ public class TeleOP extends LinearOpMode {
             motor3.setPower(m3Power);
             motor4.setPower(m4Power);
             motor5.setPower((m5Power + 0.01)/(3.0/4.0));
-            motor6.setPower((-m6Power - 0.01)/2.0);
+            //motor6.setPower((-m6Power - 0.01)/2.0);
 
             if (gamepad2.right_bumper) {
                 SJW.setPower(1);
@@ -87,8 +87,8 @@ public class TeleOP extends LinearOpMode {
             }
 
 
-            telemetry.addData("m5", motor5);
-            telemetry.addData("m6", motor6);
+            telemetry.addData("m5", m5Power);
+            //telemetry.addData("m6", motor6);
             telemetry.addData("FM", forwardMotion);
             telemetry.addData("HM", horizonMotion);
             telemetry.addData("RM", rotateMotion);
