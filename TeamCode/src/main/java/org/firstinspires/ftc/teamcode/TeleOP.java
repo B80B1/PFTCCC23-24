@@ -3,6 +3,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 
@@ -18,7 +19,7 @@ public class TeleOP extends LinearOpMode {
     private DcMotor motor5 = null; //slide control right
     //private DcMotor motor6 = null; //slide control left
     private CRServo SJW;
-    private CRServo SC;
+    private Servo SC;
     private Servo PL;
 
     @Override
@@ -34,7 +35,7 @@ public class TeleOP extends LinearOpMode {
         motor5 = hardwareMap.get(DcMotor.class, "arm");
         //motor6 = hardwareMap.get(DcMotor.class, "arm t");
         SJW = hardwareMap.get(CRServo.class, "wrist");
-        SC = hardwareMap.get(CRServo.class, "claw");
+        SC = hardwareMap.get(Servo.class, "claw");
         PL = hardwareMap.get(Servo.class, "Plane J");
 
 
@@ -78,11 +79,9 @@ public class TeleOP extends LinearOpMode {
                 SJW.setPower(0);
             }
             if (gamepad2.b) {
-                SC.setPower(1);
+                SC.setPosition();
             } else if (gamepad2.a){
-                SC.setPower(0.5);
-            } else {
-                SC.setPower(0);
+                SC.setPosition();
             }
             if (gamepad2.dpad_up) {
                 PL.setPosition(96);
