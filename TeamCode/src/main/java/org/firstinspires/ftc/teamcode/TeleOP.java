@@ -22,6 +22,8 @@ public class TeleOP extends LinearOpMode {
     private Servo SC;
     private Servo PL;
 
+    private Servo P;
+
     @Override
     public void runOpMode() {
 
@@ -37,6 +39,8 @@ public class TeleOP extends LinearOpMode {
         SJW = hardwareMap.get(Servo.class, "wrist");
         SC = hardwareMap.get(Servo.class, "claw");
         PL = hardwareMap.get(Servo.class, "Plane J");
+        P = hardwareMap.get(Servo.class, "Plane");
+
 
 
         motor1.setDirection(DcMotor.Direction.FORWARD);
@@ -87,6 +91,13 @@ public class TeleOP extends LinearOpMode {
             }
             if (gamepad2.dpad_up) {
                 PL.setPosition(96);
+            } else if (gamepad2.dpad_down) {
+                PL.setPosition(0);
+            }
+            if (gamepad2.dpad_right) {
+                P.setPosition(.60);
+            } else if (gamepad2.dpad_left) {
+                P.setPosition(.30);
             }
 
 
