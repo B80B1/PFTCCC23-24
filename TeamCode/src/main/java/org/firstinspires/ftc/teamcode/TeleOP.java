@@ -5,6 +5,10 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcontroller.external.samples.SensorREV2mDistance;
 
 
 
@@ -24,6 +28,16 @@ public class TeleOP extends LinearOpMode {
 
     private Servo P;
 
+    private Servo Intake;
+
+    private DistanceSensor D1;
+
+    private DistanceSensor D2;
+
+    private Servo PinR;
+
+    private Servo PinL;
+
     @Override
     public void runOpMode() {
 
@@ -37,9 +51,13 @@ public class TeleOP extends LinearOpMode {
         motor5 = hardwareMap.get(DcMotor.class, "arm");
         //motor6 = hardwareMap.get(DcMotor.class, "arm t");
         SJW = hardwareMap.get(Servo.class, "wrist");
-        SC = hardwareMap.get(Servo.class, "claw");
         PL = hardwareMap.get(Servo.class, "Plane J");
         P = hardwareMap.get(Servo.class, "Plane");
+        D1 = hardwareMap.get(DistanceSensor.class, "D1");
+        D2 = hardwareMap.get(DistanceSensor.class, "D2");
+        PinR = hardwareMap.get(Servo.class, "PinR");
+        PinL = hardwareMap.get(Servo.class, "PinL");
+
 
 
 
@@ -75,19 +93,12 @@ public class TeleOP extends LinearOpMode {
             motor5.setPower((m5Power + 0.01)/(2.0));
             //motor6.setPower((-m6Power - 0.01)/2.0);
 
-            if (gamepad2.right_bumper) {
+            if (gamepad2.a) {
                 SJW.setPosition(0.3);
-            } else if (gamepad2.left_bumper) {
+            } else if (gamepad2.b) {
                 SJW.setPosition(0.7);
             } else {
                 SJW.setPosition(0);
-            }
-            if (gamepad2.b) {
-                SC.setPosition(0.70);
-            } else if (gamepad2.a){
-                SC.setPosition(0.30);
-            } else {
-                SC.setPosition(0.50);
             }
             if (gamepad2.dpad_up) {
                 PL.setPosition(96);
@@ -100,6 +111,49 @@ public class TeleOP extends LinearOpMode {
                 P.setPosition(.30);
             } else {
                 P.setPosition(.50);
+            }
+            if (gamepad2.right_bumper) {
+                    double Distance1;
+                    Distance1 = D1.getDistance(DistanceUnit.CM);
+                if (Distance1 < 3) {
+                    PinR.setPosition(.0);
+                    Intake.setPosition(-1);
+                } else if (Distance1 >= 3) {
+                    Intake.setPosition(1);
+                    PinR.setPosition(.50);
+                }
+            } else if (gamepad2.left_bumper) {
+                double Distance2;
+                Distance2 = D2.getDistance(DistanceUnit.CM);
+                if (Distance2 < 3) {
+                    PinL.setPosition(.0);
+                    Intake.setPosition(0);
+                } else if (Distance2 >= 3) {
+                    Intake.setPosition(1);
+                    PinL.setPosition(.50);
+                }
+            } else if (gamepad2.left_bumper && gamepad2.right_bumper) {
+                double Distance1;
+                double Distance2;
+                Distance1 = D1.getDistance(DistanceUnit.CM);
+                Distance2 = D2.getDistance(DistanceUnit.CM);
+                if ((Distance1 < 3) && (Distance2 < 3)) {
+                    PinR.setPosition(.0);
+                    PinL.setPosition(.0);
+                    Intake.setPosition(0.0);
+                } else if ((Distance1 >= 3) && (Distance2 >= 3)) {
+                    Intake.setPosition(1);
+                    PinR.setPosition(.50);
+                    PinL.setPosition(.50);
+                } else if ((Distance1 < 3) && (Distance2 >= 3)) {
+                    telemetry.addData("Use Just Left Bumper", Distance2);
+                } else if ((Distance1 >= 3) && (Distance2 < 3)) {
+                    telemetry.addData("Use Just Right Bumper", Distance1);
+                }
+            } else {
+                PinR.setPosition(0.0);
+                PinL.setPosition(0.0);
+                Intake.setPosition(0.50);
             }
 
 
