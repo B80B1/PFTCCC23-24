@@ -21,7 +21,7 @@ public class TeleOP extends LinearOpMode {
     private DcMotor motor3 = null;
     private DcMotor motor4 = null;
     private DcMotor motor5 = null; //slide control right
-    //private DcMotor motor6 = null; //slide control left
+    private DcMotor motor6 = null; //slide control left
     private Servo SJW;
     private Servo SC;
     private Servo PL;
@@ -49,7 +49,7 @@ public class TeleOP extends LinearOpMode {
         motor3 = hardwareMap.get(DcMotor.class, "leftBack"); //backleft, port 3
         motor4 = hardwareMap.get(DcMotor.class, "rightBack");  //backright, port 2
         motor5 = hardwareMap.get(DcMotor.class, "arm");
-        //motor6 = hardwareMap.get(DcMotor.class, "arm t");
+        motor6 = hardwareMap.get(DcMotor.class, "arm t");
         SJW = hardwareMap.get(Servo.class, "wrist");
         PL = hardwareMap.get(Servo.class, "Plane J");
         P = hardwareMap.get(Servo.class, "Plane");
@@ -84,14 +84,14 @@ public class TeleOP extends LinearOpMode {
             double m3Power = (forwardMotion + horizonMotion - rotateMotion) / denominator;
             double m4Power = (forwardMotion - horizonMotion + rotateMotion) / denominator;
             double m5Power = gamepad2.right_stick_y;
-            //double m6Power = gamepad2.left_stick_y;
+            double m6Power = gamepad2.left_stick_y;
 
             motor1.setPower(m1Power);
             motor2.setPower(m2Power);
             motor3.setPower(m3Power);
             motor4.setPower(m4Power);
             motor5.setPower((m5Power + 0.01)/(2.0));
-            //motor6.setPower((-m6Power - 0.01)/2.0);
+            motor6.setPower((-m6Power - 0.01)/2.0);
 
             if (gamepad2.a) {
                 SJW.setPosition(0.3);
