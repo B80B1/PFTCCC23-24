@@ -37,6 +37,7 @@ public class TeleOP extends LinearOpMode {
     private Servo PinR;
 
     private Servo PinL;
+    private DcMotor motor7;
 
     @Override
     public void runOpMode() {
@@ -53,6 +54,7 @@ public class TeleOP extends LinearOpMode {
         SJW = hardwareMap.get(Servo.class, "wrist");
         PL = hardwareMap.get(Servo.class, "Plane J");
         P = hardwareMap.get(Servo.class, "Plane");
+        motor7 = hardwareMap.get(DcMotor.class, "Hook");
        /* D1 = hardwareMap.get(DistanceSensor.class, "D1");
         D2 = hardwareMap.get(DistanceSensor.class, "D2");
         PinR = hardwareMap.get(Servo.class, "PinR");
@@ -85,6 +87,7 @@ public class TeleOP extends LinearOpMode {
             double m4Power = (forwardMotion - horizonMotion + rotateMotion) / denominator;
             double m5Power = gamepad2.right_stick_y;
             double m6Power = gamepad2.left_stick_y;
+            double m7Power = gamepad2.right_trigger - gamepad2.left_trigger;
 
             motor1.setPower(m1Power);
             motor2.setPower(m2Power);
@@ -92,6 +95,7 @@ public class TeleOP extends LinearOpMode {
             motor4.setPower(m4Power);
             motor5.setPower((m5Power + 0.01)/(2.0));
             motor6.setPower((-m6Power - 0.01)/2.0);
+            motor7.setPower(m7Power);
 
             if (gamepad2.a) {
                 SJW.setPosition(0.3);
