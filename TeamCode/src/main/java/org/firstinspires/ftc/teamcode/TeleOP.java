@@ -53,10 +53,10 @@ public class TeleOP extends LinearOpMode {
         SJW = hardwareMap.get(Servo.class, "wrist");
         PL = hardwareMap.get(Servo.class, "Plane J");
         P = hardwareMap.get(Servo.class, "Plane");
-        D1 = hardwareMap.get(DistanceSensor.class, "D1");
+       /* D1 = hardwareMap.get(DistanceSensor.class, "D1");
         D2 = hardwareMap.get(DistanceSensor.class, "D2");
         PinR = hardwareMap.get(Servo.class, "PinR");
-        PinL = hardwareMap.get(Servo.class, "PinL");
+        PinL = hardwareMap.get(Servo.class, "PinL");*/
 
 
 
@@ -112,7 +112,7 @@ public class TeleOP extends LinearOpMode {
             } else {
                 P.setPosition(.50);
             }
-            if (gamepad2.right_bumper) {
+            /*if (gamepad2.right_bumper) {
                     double Distance1;
                     Distance1 = D1.getDistance(DistanceUnit.CM);
                 if (Distance1 < 3) {
@@ -154,7 +154,7 @@ public class TeleOP extends LinearOpMode {
                 PinR.setPosition(0.0);
                 PinL.setPosition(0.0);
                 Intake.setPosition(0.50);
-            }
+            }*/
 
 
             telemetry.addData("m5", m5Power);
