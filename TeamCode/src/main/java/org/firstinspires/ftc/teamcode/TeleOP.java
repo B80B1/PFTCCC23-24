@@ -38,6 +38,7 @@ public class TeleOP extends LinearOpMode {
 
     private Servo PinL;
     private DcMotor motor7;
+    private Servo JIntake;
 
     @Override
     public void runOpMode() {
@@ -56,9 +57,12 @@ public class TeleOP extends LinearOpMode {
         P = hardwareMap.get(Servo.class, "Plane");
         motor7 = hardwareMap.get(DcMotor.class, "Hook");
        /* D1 = hardwareMap.get(DistanceSensor.class, "D1");
-        D2 = hardwareMap.get(DistanceSensor.class, "D2");
+        D2 = hardwareMap.get(DistanceSensor.class, "D2");*/
         PinR = hardwareMap.get(Servo.class, "PinR");
-        PinL = hardwareMap.get(Servo.class, "PinL");*/
+        PinL = hardwareMap.get(Servo.class, "PinL");
+        Intake = hardwareMap.get(Servo.class, "intake");
+        JIntake = hardwareMap.get(Servo.class, "JIntake");
+
 
 
 
@@ -93,8 +97,8 @@ public class TeleOP extends LinearOpMode {
             motor2.setPower(m2Power);
             motor3.setPower(m3Power);
             motor4.setPower(m4Power);
-            motor5.setPower((m5Power + 0.01)/(2.0));
-            motor6.setPower((-m6Power - 0.01)/2.0);
+            motor5.setPower((m5Power + (0.01 * m5Power)));
+            motor6.setPower((-m6Power - 0.01)*0.5);
             motor7.setPower(m7Power);
 
             if (gamepad2.a) {
@@ -116,49 +120,14 @@ public class TeleOP extends LinearOpMode {
             } else {
                 P.setPosition(.50);
             }
-            /*if (gamepad2.right_bumper) {
-                    double Distance1;
-                    Distance1 = D1.getDistance(DistanceUnit.CM);
-                if (Distance1 < 3) {
-                    PinR.setPosition(.0);
-                    Intake.setPosition(-1);
-                } else if (Distance1 >= 3) {
-                    Intake.setPosition(1);
-                    PinR.setPosition(.50);
-                }
-            } else if (gamepad2.left_bumper) {
-                double Distance2;
-                Distance2 = D2.getDistance(DistanceUnit.CM);
-                if (Distance2 < 3) {
-                    PinL.setPosition(.0);
-                    Intake.setPosition(0);
-                } else if (Distance2 >= 3) {
-                    Intake.setPosition(1);
-                    PinL.setPosition(.50);
-                }
-            } else if (gamepad2.left_bumper && gamepad2.right_bumper) {
-                double Distance1;
-                double Distance2;
-                Distance1 = D1.getDistance(DistanceUnit.CM);
-                Distance2 = D2.getDistance(DistanceUnit.CM);
-                if ((Distance1 < 3) && (Distance2 < 3)) {
-                    PinR.setPosition(.0);
-                    PinL.setPosition(.0);
-                    Intake.setPosition(0.0);
-                } else if ((Distance1 >= 3) && (Distance2 >= 3)) {
-                    Intake.setPosition(1);
-                    PinR.setPosition(.50);
-                    PinL.setPosition(.50);
-                } else if ((Distance1 < 3) && (Distance2 >= 3)) {
-                    telemetry.addData("Use Just Left Bumper", Distance2);
-                } else if ((Distance1 >= 3) && (Distance2 < 3)) {
-                    telemetry.addData("Use Just Right Bumper", Distance1);
-                }
+            boolean in;
+            if (gamepad2.a) {
+                in = true;
             } else {
-                PinR.setPosition(0.0);
-                PinL.setPosition(0.0);
-                Intake.setPosition(0.50);
-            }*/
+                in = false;
+            }
+
+
 
 
             telemetry.addData("m5", m5Power);
