@@ -86,7 +86,7 @@ public class TeleOP extends LinearOpMode {
             motor3.setPower(m3Power);
             motor4.setPower(m4Power);
             motor5.setPower((m5Power + 0.01));
-            motor6.setPower((-m6Power - 0.01)/2.0);
+            motor6.setPower(-m6Power);
 
             if (gamepad2.right_bumper)
                 clawOffset += CLAW_SPEED;
@@ -94,7 +94,7 @@ public class TeleOP extends LinearOpMode {
                 clawOffset -= CLAW_SPEED;
             else clawOffset = clawOffset;
 
-            clawOffset = Range.clip(clawOffset, -1.0, 1.0);
+            clawOffset = Range.clip(clawOffset, -1, 1);
             SJW.setPosition(MID_SERVO - clawOffset);
 
             if (gamepad2.dpad_up) {
