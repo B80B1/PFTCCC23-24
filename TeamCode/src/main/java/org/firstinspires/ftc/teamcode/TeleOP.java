@@ -98,7 +98,7 @@ public class TeleOP extends LinearOpMode {
             SJW.setPosition(MID_SERVO - clawOffset);
 
             if (gamepad2.dpad_up) {
-                PL.setPosition(96);
+                PL.setPosition(40);
             } else if (gamepad2.dpad_down) {
                 PL.setPosition(0);
             }
