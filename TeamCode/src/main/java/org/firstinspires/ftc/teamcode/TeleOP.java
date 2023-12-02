@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.util.Range;
+
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcontroller.external.samples.SensorREV2mDistance;
 
@@ -29,6 +31,11 @@ public class TeleOP extends LinearOpMode {
     private Servo PL;
 
     private Servo P;
+
+    double clawOffset = 0;
+
+    public static final double MID_SERVO   =  0.4;
+    public static final double CLAW_SPEED  = 0.002;
 
     @Override
     public void runOpMode() {
@@ -78,16 +85,18 @@ public class TeleOP extends LinearOpMode {
             motor2.setPower(m2Power);
             motor3.setPower(m3Power);
             motor4.setPower(m4Power);
-            motor5.setPower((m5Power + 0.01)/(2.0));
+            motor5.setPower((m5Power + 0.01));
             motor6.setPower((-m6Power - 0.01)/2.0);
 
-            if (gamepad2.a) {
-                SJW.setPosition(0.3);
-            } else if (gamepad2.b) {
-                SJW.setPosition(0.7);
-            } else {
-                SJW.setPosition(0);
-            }
+            if (gamepad2.right_bumper)
+                clawOffset += CLAW_SPEED;
+            else if (gamepad2.left_bumper)
+                clawOffset -= CLAW_SPEED;
+            else clawOffset = clawOffset;
+
+            clawOffset = Range.clip(clawOffset, -0.19, 0.17);
+            SJW.setPosition(MID_SERVO - clawOffset);
+
             if (gamepad2.dpad_up) {
                 PL.setPosition(96);
             } else if (gamepad2.dpad_down) {
