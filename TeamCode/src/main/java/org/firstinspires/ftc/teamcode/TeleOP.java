@@ -19,14 +19,16 @@ public class TeleOP extends LinearOpMode {
     private DcMotor motor1 = null;
     private DcMotor motor2 = null;
     private DcMotor motor3 = null;
-    private DcMotor motvate DcMotor motor6 = null; //slide control left
-    private Servo SJW;or4 = null;
+    private DcMotor motor6 = null; //slide control left
+
+    private DcMotor motor4 = null;
     private DcMotor motor5 = null; //slide control right
-    pri
+
     private Servo SC;
     private Servo PL;
 
     private Servo P;
+    private Servo C;
 
     @Override
     public void runOpMode() {
@@ -40,13 +42,10 @@ public class TeleOP extends LinearOpMode {
         motor4 = hardwareMap.get(DcMotor.class, "rightBack");  //backright, port 2
         motor5 = hardwareMap.get(DcMotor.class, "arm");
         motor6 = hardwareMap.get(DcMotor.class, "arm t");
-        SJW = hardwareMap.get(Servo.class, "wrist");
         PL = hardwareMap.get(Servo.class, "Plane J");
         P = hardwareMap.get(Servo.class, "Plane");
-        D1 = hardwareMap.get(DistanceSensor.class, "D1");
-        D2 = hardwareMap.get(DistanceSensor.class, "D2");
-        PinR = hardwareMap.get(Servo.class, "PinR");
-        PinL = hardwareMap.get(Servo.class, "PinL");
+        C = hardwareMap.get(Servo.class, "Intake");
+
 
 
 
@@ -80,72 +79,15 @@ public class TeleOP extends LinearOpMode {
             motor2.setPower(m2Power);
             motor3.setPower(m3Power);
             motor4.setPower(m4Power);
-            motor5.setPower((m5Power + 0.01)/(2.0));
-            motor6.setPower((-m6Power - 0.01)/2.0);
+            motor5.setPower((m5Power)/(2.0));
+            motor6.setPower((-m6Power)/2.0);
+
 
             if (gamepad2.a) {
-                SJW.setPosition(0.3);
+                C.setPosition(90);
             } else if (gamepad2.b) {
-                SJW.setPosition(0.7);
-            } else {
-                SJW.setPosition(0);
-            }
-            if (gamepad2.dpad_up) {
-                PL.setPosition(96);
-            } else if (gamepad2.dpad_down) {
-                PL.setPosition(0);
-            }
-            if (gamepad2.dpad_right) {
-                P.setPosition(.60);
-            } else if (gamepad2.dpad_left) {
-                P.setPosition(.30);
-            } else {
-                P.setPosition(.50);
-            }
-            if (gamepad2.right_bumper) {
-                    double Distance1;
-                    Distance1 = D1.getDistance(DistanceUnit.CM);
-                if (Distance1 < 3) {
-                    PinR.setPosition(.0);
-                    Intake.setPosition(-1);
-                } else if (Distance1 >= 3) {
-                    Intake.setPosition(1);
-                    PinR.setPosition(.50);
-                }
-            } else if (gamepad2.left_bumper) {
-                double Distance2;
-                Distance2 = D2.getDistance(DistanceUnit.CM);
-                if (Distance2 < 3) {
-                    PinL.setPosition(.0);
-                    Intake.setPosition(0);
-                } else if (Distance2 >= 3) {
-                    Intake.setPosition(1);
-                    PinL.setPosition(.50);
-                }
-            } else if (gamepad2.left_bumper && gamepad2.right_bumper) {
-                double Distance1;
-                double Distance2;
-                Distance1 = D1.getDistance(DistanceUnit.CM);
-                Distance2 = D2.getDistance(DistanceUnit.CM);
-                if ((Distance1 < 3) && (Distance2 < 3)) {
-                    PinR.setPosition(.0);
-                    PinL.setPosition(.0);
-                    Intake.setPosition(0.0);
-                } else if ((Distance1 >= 3) && (Distance2 >= 3)) {
-                    Intake.setPosition(1);
-                    PinR.setPosition(.50);
-                    PinL.setPosition(.50);
-                } else if ((Distance1 < 3) && (Distance2 >= 3)) {
-                    telemetry.addData("Use Just Left Bumper", Distance2);
-                } else if ((Distance1 >= 3) && (Distance2 < 3)) {
-                    telemetry.addData("Use Just Right Bumper", Distance1);
-                }
-            } else {
-                PinR.setPosition(0.0);
-                PinL.setPosition(0.0);
-                Intake.setPosition(0.50);
-            }
 
+            }
 
             telemetry.addData("m5", m5Power);
             //telemetry.addData("m6", motor6);
