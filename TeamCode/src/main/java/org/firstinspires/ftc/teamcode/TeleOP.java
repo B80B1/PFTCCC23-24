@@ -49,16 +49,12 @@ public class TeleOP extends LinearOpMode {
         motor4 = hardwareMap.get(DcMotor.class, "rightBack");  //backright, port 2
         motor5 = hardwareMap.get(DcMotor.class, "arm");
         motor6 = hardwareMap.get(DcMotor.class, "arm t");
-        motor7 =hardwareMap.get(DcMotor.class, "hook");
+        motor7 = hardwareMap.get(DcMotor.class, "hook");
         PL = hardwareMap.get(Servo.class, "Plane J");
         HL = hardwareMap.get(Servo.class, "Hook J");
         P = hardwareMap.get(Servo.class, "Plane");
 
         C = hardwareMap.get(Servo.class, "Intake");
-
-
-
-
 
 
         motor1.setDirection(DcMotor.Direction.FORWARD);
@@ -91,8 +87,8 @@ public class TeleOP extends LinearOpMode {
             motor2.setPower(m2Power);
             motor3.setPower(m3Power);
             motor4.setPower(m4Power);
-            motor5.setPower((m5Power)/(2.0));
-            motor6.setPower((-m6Power)/2.0);
+            motor5.setPower((m5Power) / (2.0));
+            motor6.setPower((-m6Power) / 2.0);
             motor7.setPower(m7Power);
 
             if (gamepad2.a) {
@@ -101,26 +97,27 @@ public class TeleOP extends LinearOpMode {
                 C.setPosition(180);
             } else {
                 C.setPosition(0);
-
-                
+            }
 
             if (gamepad2.right_bumper) {
                 PL.setPosition(42);
-            } if (gamepad2.left_bumper) {
-                HL.setPosition(90);
-            } if (gamepad2.dpad_up) {
+            }
+            if (gamepad2.left_bumper) {
+                    HL.setPosition(90);
+            }
+            if (gamepad2.dpad_up) {
                 P.setPosition(0.01);
             }
 
 
-            telemetry.addData("m5", m5Power);
-            telemetry.addData("m6", m6Power);
-            telemetry.addData("FM", forwardMotion);
-            telemetry.addData("HM", horizonMotion);
-            telemetry.addData("RM", rotateMotion);
-            telemetry.addData("Status", "Running");
-            telemetry.update();
+                telemetry.addData("m5", m5Power);
+                telemetry.addData("m6", m6Power);
+                telemetry.addData("FM", forwardMotion);
+                telemetry.addData("HM", horizonMotion);
+                telemetry.addData("RM", rotateMotion);
+                telemetry.addData("Status", "Running");
+                telemetry.update();
 
+            }
         }
     }
-}
