@@ -10,8 +10,6 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcontroller.external.samples.SensorREV2mDistance;
 
-
-
 @TeleOp(name = "Tele")
 
 public class TeleOP extends LinearOpMode {
@@ -19,14 +17,12 @@ public class TeleOP extends LinearOpMode {
     private DcMotor motor1 = null;
     private DcMotor motor2 = null;
     private DcMotor motor3 = null;
-    private DcMotor motor6 = null; //slide control left
-
+    private DcMotor motor6 = null; //slide control
     private DcMotor motor4 = null;
-    private DcMotor motor5 = null; //slide control right
-
-    private Servo SC;
+    private DcMotor motor5 = null; //arm control
+    private DcMotor motor7 = null; //hook
     private Servo PL;
-
+    private Servo HL;
     private Servo P;
     private Servo C;
 
@@ -42,13 +38,11 @@ public class TeleOP extends LinearOpMode {
         motor4 = hardwareMap.get(DcMotor.class, "rightBack");  //backright, port 2
         motor5 = hardwareMap.get(DcMotor.class, "arm");
         motor6 = hardwareMap.get(DcMotor.class, "arm t");
+        motor7 =hardwareMap.get(DcMotor.class, "hook");
         PL = hardwareMap.get(Servo.class, "Plane J");
+        HL = hardwareMap.get(Servo.class, "Hook J");
         P = hardwareMap.get(Servo.class, "Plane");
         C = hardwareMap.get(Servo.class, "Intake");
-
-
-
-
 
         motor1.setDirection(DcMotor.Direction.FORWARD);
         motor2.setDirection(DcMotor.Direction.REVERSE);
@@ -74,6 +68,7 @@ public class TeleOP extends LinearOpMode {
             double m4Power = (forwardMotion - horizonMotion + rotateMotion) / denominator;
             double m5Power = gamepad2.right_stick_y;
             double m6Power = gamepad2.left_stick_y;
+            double m7Power = gamepad2.right_trigger + gamepad2.left_trigger;
 
             motor1.setPower(m1Power);
             motor2.setPower(m2Power);
@@ -81,16 +76,26 @@ public class TeleOP extends LinearOpMode {
             motor4.setPower(m4Power);
             motor5.setPower((m5Power)/(2.0));
             motor6.setPower((-m6Power)/2.0);
-
+            motor7.setPower(m7Power);
 
             if (gamepad2.a) {
                 C.setPosition(90);
             } else if (gamepad2.b) {
+                C.setPosition(180);
+            } else {
+                C.setPosition(0);
+            }
 
+            if (gamepad2.right_bumper) {
+                PL.setPosition(42);
+            } if (gamepad2.left_bumper) {
+                HL.setPosition(90);
+            } if (gamepad2.dpad_up) {
+                P.setPosition(0.01);
             }
 
             telemetry.addData("m5", m5Power);
-            //telemetry.addData("m6", motor6);
+            telemetry.addData("m6", m6Power);
             telemetry.addData("FM", forwardMotion);
             telemetry.addData("HM", horizonMotion);
             telemetry.addData("RM", rotateMotion);
