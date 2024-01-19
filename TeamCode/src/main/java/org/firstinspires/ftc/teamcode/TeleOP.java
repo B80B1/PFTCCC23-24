@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.util.Range;
+
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcontroller.external.samples.SensorREV2mDistance;
 
@@ -17,14 +19,23 @@ public class TeleOP extends LinearOpMode {
     private DcMotor motor1 = null;
     private DcMotor motor2 = null;
     private DcMotor motor3 = null;
+
     private DcMotor motor6 = null; //slide control
     private DcMotor motor4 = null;
     private DcMotor motor5 = null; //arm control
     private DcMotor motor7 = null; //hook
+
+
+    private Servo SC;
     private Servo PL;
     private Servo HL;
     private Servo P;
     private Servo C;
+
+    double clawOffset = 0;
+
+    public static final double MID_SERVO   =  0.4;
+    public static final double CLAW_SPEED  = 0.002;
 
     @Override
     public void runOpMode() {
@@ -42,7 +53,13 @@ public class TeleOP extends LinearOpMode {
         PL = hardwareMap.get(Servo.class, "Plane J");
         HL = hardwareMap.get(Servo.class, "Hook J");
         P = hardwareMap.get(Servo.class, "Plane");
+
         C = hardwareMap.get(Servo.class, "Intake");
+
+
+
+
+
 
         motor1.setDirection(DcMotor.Direction.FORWARD);
         motor2.setDirection(DcMotor.Direction.REVERSE);
@@ -84,7 +101,8 @@ public class TeleOP extends LinearOpMode {
                 C.setPosition(180);
             } else {
                 C.setPosition(0);
-            }
+
+                
 
             if (gamepad2.right_bumper) {
                 PL.setPosition(42);
@@ -93,6 +111,7 @@ public class TeleOP extends LinearOpMode {
             } if (gamepad2.dpad_up) {
                 P.setPosition(0.01);
             }
+
 
             telemetry.addData("m5", m5Power);
             telemetry.addData("m6", m6Power);
