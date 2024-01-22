@@ -31,7 +31,7 @@ public class TeleOP extends LinearOpMode {
     private Servo HL;
     private Servo P;
     private Servo C;
-    private Servo L;
+    private CRServo L;
 
     double clawOffset = 0;
 
@@ -55,7 +55,7 @@ public class TeleOP extends LinearOpMode {
         HL = hardwareMap.get(Servo.class, "Hook J");
         P = hardwareMap.get(Servo.class, "Plane");
         C = hardwareMap.get(Servo.class, "Intake");
-        L =hardwareMap.get(Servo.class, "Linear");
+        L =hardwareMap.get(CRServo.class, "Linear");
 
 
         motor1.setDirection(DcMotor.Direction.FORWARD);
@@ -102,10 +102,12 @@ public class TeleOP extends LinearOpMode {
                 PL.setPosition(-21);
             }
             if (gamepad2.left_bumper) {
-                HL.setPosition(-135);
-                L.setPosition(1);
+                HL.setPosition(1);
+                L.setPower(0);
+            } else if (gamepad2.dpad_down){
+                L.setPower(0.5);
             } else {
-                L.setPosition(0);
+                L.setPower(1);
             } if (gamepad2.dpad_up) {
                 P.setPosition(0.01);
             }
