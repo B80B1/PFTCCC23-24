@@ -24,8 +24,6 @@ public class TeleOP extends LinearOpMode {
     private DcMotor motor4 = null;
     private DcMotor motor5 = null; //arm control
     private DcMotor motor7 = null; //hook
-
-
     private Servo SC;
     private Servo PL;
     private Servo HL;
@@ -96,12 +94,9 @@ public class TeleOP extends LinearOpMode {
                 C.setPosition(90);
             } else {
                 C.setPosition(0);
-            }
-
-            if (gamepad2.right_bumper) {
-                PL.setPosition(-21);
-            }
-            if (gamepad2.left_bumper) {
+            } if (gamepad2.right_bumper) {
+                PL.setPosition(-60);
+            } if (gamepad2.left_bumper) {
                 HL.setPosition(1);
                 L.setPower(0);
             } else if (gamepad2.dpad_down){
@@ -109,7 +104,7 @@ public class TeleOP extends LinearOpMode {
             } else {
                 L.setPower(1);
             } if (gamepad2.dpad_up) {
-                P.setPosition(0.01);
+                P.setPosition(1);
             }
 
 
