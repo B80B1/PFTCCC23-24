@@ -184,7 +184,8 @@ public void encoderDrive(double rspeed, double fspeed,
     private DcMotor         backrightDrive  = null;
     private DcMotor         frontleftDrive = null;
     private DcMotor         frontrightDrive = null;
-    
+    private DcMotor         arm = null;
+    private Servo           pin;
     private ElapsedTime     runtime = new ElapsedTime();
 
     // Calculate the COUNTS_PER_INCH for your specific drive train.
@@ -212,6 +213,8 @@ public void encoderDrive(double rspeed, double fspeed,
         backrightDrive = hardwareMap.get(DcMotor.class, "rightBack");
         frontleftDrive = hardwareMap.get(DcMotor.class, "leftFront");
         frontrightDrive = hardwareMap.get(DcMotor.class, "rightFront");
+	arm = hardwareMap.get(DcMotor.class, "arm");
+	pin = hardwareMap.get(Servo.class, "Intake");
         //redA = hardwareMap.get(DigitalChannel.class, "red");
         //greenA = hardwareMap.get(DigitalChannel.class, "green");
         //redB = hardwareMap.get(DigitalChannel.class, "red2");
@@ -258,9 +261,17 @@ public void encoderDrive(double rspeed, double fspeed,
 
     // Loop until we are asked to stop
     while (opModeIsActive()) {
+             	pin.setPosition(0.4);
+		arm.setPower(0.05);
                 encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, -5.5, 5.5, 5.5, -5.5, 1.5);
                 sleep(500);
                 encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 90, 90, 90, 90, 3.0);
+		arm.setPower(0)
+		pin.setPosition(1);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -6, -6, -6, -6, 3.0);
+		arm.setPower(0.05);
+		encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, -8, 8, 8, -8, 1.5);
+		encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 6, 6, 6, 6, 2.0);
                 sleep(10000000);
                 }
       // Explain basic gain information via telemetry

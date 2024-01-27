@@ -204,7 +204,8 @@ public void encoderDrive(double rspeed, double fspeed,
     private DcMotor         backrightDrive  = null;
     private DcMotor         frontleftDrive = null;
     private DcMotor         frontrightDrive = null;
-    
+    private DcMotor         arm = null;
+    private Servo           pin;
     private ElapsedTime     runtime = new ElapsedTime();
 
     // Calculate the COUNTS_PER_INCH for your specific drive train.
@@ -232,6 +233,8 @@ public void encoderDrive(double rspeed, double fspeed,
         backrightDrive = hardwareMap.get(DcMotor.class, "rightBack");
         frontleftDrive = hardwareMap.get(DcMotor.class, "leftFront");
         frontrightDrive = hardwareMap.get(DcMotor.class, "rightFront");
+	arm = hardwareMap.get(DcMotor.class, "arm");
+	pin = hardwareMap.get(Servo.class, "Intake");
         //redA = hardwareMap.get(DigitalChannel.class, "red");
         //greenA = hardwareMap.get(DigitalChannel.class, "green");
         //redB = hardwareMap.get(DigitalChannel.class, "red2");
@@ -239,7 +242,7 @@ public void encoderDrive(double rspeed, double fspeed,
         
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
-        // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
+        // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction //flips
         frontleftDrive.setDirection(DcMotor.Direction.REVERSE);
         frontrightDrive.setDirection(DcMotor.Direction.FORWARD);
         backleftDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -278,11 +281,20 @@ public void encoderDrive(double rspeed, double fspeed,
 
     // Loop until we are asked to stop
     while (opModeIsActive()) {
+		pin.setPosition(0.4);
+		arm.setPower(0.05);
                 encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, 5.5, -5.5, -5.5, 5.5, 1.5);
                 sleep(500);
                 encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 46, 46, 46, 46, 3.0);
+		arm.setPower(0);
+		pin.setPosition(1);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -6, -6, -6, -6, 3.0);
+		arm.setPower(0.05);
+		encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, 8, -8, -8, 8, 1.5);
+		encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 6, 6, 6, 6, 2.0);
                 sleep(10000000);
-                }
+                
+}
       // Explain basic gain information via telemetry
       
       /* Use telemetry to display feedback on the driver station. We show the red, green, and blue
