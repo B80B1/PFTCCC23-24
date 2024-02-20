@@ -89,31 +89,27 @@ public class TeleOP extends LinearOpMode {
             motor2.setPower(m2Power);
             motor3.setPower(m3Power);
             motor4.setPower(m4Power);
-            motor5.setPower((m5Power));
+            motor5.setPower((m5Power)-0.13);
             motor6.setPower((-m6Power)/2.0);
             motor7.setPower(m7Power);
 
-            if (gamepad2.a) {
+            if (gamepad2.right_bumper) {
                 C.setPosition(0.4);
             } else {
                 C.setPosition(0);
-            } if (gamepad2.right_bumper) {
+            } if (gamepad2.dpad_left) {
                 PL.setPosition(0);
-            } if (gamepad2.left_bumper) {
-                HL.setPosition(1);
-                L.setPower(0);
             } else if (gamepad2.dpad_down){
                 L.setPower(0.5);
             } else {
                 L.setPower(1);
             } if (gamepad2.dpad_up) {
                 P.setPosition(90);
-            } if (gamepad2.x) {
-                AJ.setPosition(0.05);
+            } if (gamepad2.left_bumper) {
+                AJ.setPosition(0.45);
             } else {
-                AJ.setPosition(0.35);
+                AJ.setPosition(0.62);
             }
-
 
                 telemetry.addData("m5", m5Power);
                 telemetry.addData("m6", m6Power);

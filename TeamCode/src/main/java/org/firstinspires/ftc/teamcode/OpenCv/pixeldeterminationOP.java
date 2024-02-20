@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.OpenCv;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -157,10 +157,9 @@ public class pixeldeterminationOP extends LinearOpMode {
         }
 
     }
-    private static double getDistance(double width){
+    private static double getDistance(double width) {
         double distance = (objectWidthInRealWorldUnits * focalLength) / width;
         return distance;
     }
-
-
+    
 }
