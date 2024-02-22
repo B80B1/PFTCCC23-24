@@ -18,6 +18,9 @@ import org.openftc.easyopencv.OpenCvPipeline;
 public class TPDetect extends OpMode {
 
     OpenCvCamera webcam1 = null;
+    static final int STREAM_WIDTH = 1280;
+    static final int STREAM_HEIGHT = 720;
+
     @Override
     public void init(){
 
@@ -83,14 +86,14 @@ public class TPDetect extends OpMode {
             RAvgFin = RAvg.val[0];
             MAvgFin = MAvg.val[0];
 
-            if (LAvgFin > MAvgFin) {
+            if ((RAvgFin == MAvgFin) && LAvgFin != MAvgFin) {
                     telemetry.addLine("Left");
-            } else if (RAvgFin > MAvgFin) {
+            } else if ((LAvgFin == MAvgFin) && RAvgFin != MAvgFin) {
                     telemetry.addLine("Right");
             } else {
                     telemetry.addLine("Middle");
             }
-
+            YCbCr.release();
             return(outPut);
         }
     }
