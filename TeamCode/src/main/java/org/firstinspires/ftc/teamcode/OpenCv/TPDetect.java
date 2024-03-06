@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.OpenCv;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+import static org.opencv.imgproc.Imgproc.COLOR_GRAY2RGB;
 import static org.opencv.imgproc.Imgproc.COLOR_HSV2RGB;
 
 import com.acmerobotics.dashboard.config.Config;
-
+import org.checkerframework.checker.signedness.qual.Constant;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -27,12 +29,13 @@ public class TPDetect extends OpenCvPipeline {
 
     Telemetry telemetry;
     Mat mat = new Mat();
+
     public enum Location {
         Right,
         Left,
         Middle
     }
-    private Location location;
+    public Location location;
     static final Rect LeftArea = new Rect(new Point(10,100), new Point(105,200));
     static final Rect RightArea = new Rect(new Point(10, 200), new Point(205, 200));
     static final Rect MiddleArea = new Rect(new Point(220,100), new Point(310,200));
@@ -60,6 +63,7 @@ public class TPDetect extends OpenCvPipeline {
             Core.inRange(mat, MinRH, MaxRH, mat);
             Core.bitwise_or(mat1, mat2, mat);
         }
+
         Mat Left = mat.submat(LeftArea);
         Mat Right = mat.submat(RightArea);
         Mat Middle = mat.submat(MiddleArea);
