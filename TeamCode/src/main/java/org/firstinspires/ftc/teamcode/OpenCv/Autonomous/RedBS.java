@@ -1,21 +1,14 @@
 package org.firstinspires.ftc.teamcode.OpenCv.Autonomous;
 
 
-import static org.firstinspires.ftc.teamcode.OpenCv.TPDetect.Location.Left;
-import static org.firstinspires.ftc.teamcode.OpenCv.TPDetect.Location.Middle;
-import static org.firstinspires.ftc.teamcode.OpenCv.TPDetect.Location.Right;
-
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import java.util.jar.Attributes;
+
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.OpenCv.TPDetect;
-import org.firstinspires.ftc.teamcode.OpenCv.TPDetect.Location;
+import org.firstinspires.ftc.teamcode.OpenCv.TPDetectR;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 @Autonomous
@@ -29,7 +22,7 @@ public class RedBS extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         OpenCvWebcam camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam 1"), cameraMonitorViewId);
-        TPDetect detector = new TPDetect(telemetry);
+        TPDetectR detector = new TPDetectR(telemetry);
         camera.setPipeline(detector);
 
 
@@ -59,6 +52,7 @@ public class RedBS extends LinearOpMode {
             // Don't burn CPU cycles busy-looping in this sample
             sleep(50);
         }
+
         camera.stopStreaming();
     }
 }

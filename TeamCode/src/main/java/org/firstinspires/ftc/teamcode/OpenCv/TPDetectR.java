@@ -1,11 +1,9 @@
 package org.firstinspires.ftc.teamcode.OpenCv;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-import static org.opencv.imgproc.Imgproc.COLOR_GRAY2RGB;
 import static org.opencv.imgproc.Imgproc.COLOR_HSV2RGB;
 
 import com.acmerobotics.dashboard.config.Config;
-import org.checkerframework.checker.signedness.qual.Constant;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -16,7 +14,7 @@ import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 @Config
-public class TPDetect extends OpenCvPipeline {
+public class TPDetectR extends OpenCvPipeline {
     public static boolean Detect_Red = true;
     public static double MinimumVal = 100;
     public static double MaximumVal = 255;
@@ -36,10 +34,10 @@ public class TPDetect extends OpenCvPipeline {
         Middle
     }
     public Location location;
-    static final Rect LeftArea = new Rect(new Point(10,100), new Point(105,200));
-    static final Rect RightArea = new Rect(new Point(10, 200), new Point(205, 200));
-    static final Rect MiddleArea = new Rect(new Point(220,100), new Point(310,200));
-    public TPDetect(Telemetry t){
+    static final Rect LeftArea = new Rect(new Point(23,550), new Point(284,371));
+    static final Rect MiddleArea = new Rect(new Point(424, 443), new Point(857, 365));
+    static final Rect RightArea = new Rect(new Point(1021,550), new Point(1240,357));
+    public TPDetectR(Telemetry t){
         telemetry = t;
     }
 
@@ -80,22 +78,22 @@ public class TPDetect extends OpenCvPipeline {
         Right.release();
         Middle.release();
 
-        if (leftVal >= rightVal && leftVal > middleVal) {
+        if (leftVal > rightVal && leftVal > middleVal) {
                 location = Location.Left;
-                telemetry.addData("Prop at:", "Right");
-        } else if (rightVal >= middleVal) {
+                telemetry.addData("Prop at", "Right");
+        } else if (rightVal > middleVal && rightVal > leftVal) {
                 location = Location.Right;
-                telemetry.addData("Prop at:", "Left");
-        } else {
+                telemetry.addData("Prop at", "Left");
+        } else { 
                 location = Location.Middle;
-                telemetry.addData("Prop at:", "Middle");
+                telemetry.addData("Prop at", "Middle");
         }
 
         telemetry.update();
 
         Imgproc.cvtColor(mat, mat, COLOR_HSV2RGB);
         Scalar pixelColor = new Scalar(255, 255, 255);
-        Scalar propColor = new Scalar(0, 0, 255);
+        Scalar propColor = new Scalar(255, 0, 0);
 
         Imgproc.rectangle(mat, LeftArea, location == Location.Left? pixelColor:propColor);
         Imgproc.rectangle(mat, RightArea, location == Location.Right? pixelColor:propColor);
