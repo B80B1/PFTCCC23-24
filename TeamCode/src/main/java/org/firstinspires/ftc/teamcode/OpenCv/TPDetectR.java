@@ -34,9 +34,9 @@ public class TPDetectR extends OpenCvPipeline {
         Middle
     }
     public Location location;
-    static final Rect LeftArea = new Rect(new Point(23,550), new Point(284,371));
-    static final Rect MiddleArea = new Rect(new Point(424, 443), new Point(857, 365));
-    static final Rect RightArea = new Rect(new Point(1021,550), new Point(1240,357));
+    static final Rect LeftArea = new Rect(new Point(1,465), new Point(41,389));
+    static final Rect MiddleArea = new Rect(new Point(622, 406), new Point(690, 365));
+    static final Rect RightArea = new Rect(new Point(1230,570), new Point(1276,636));
     public TPDetectR(Telemetry t){
         telemetry = t;
     }
