@@ -81,10 +81,10 @@ public class TPDetectB extends OpenCvPipeline {
         if (leftVal >= rightVal && leftVal > middleVal) {
                 location = Location.Left;
                 telemetry.addData("Prop at", "Right");
-        } else if (rightVal >= middleVal && rightVal >= leftVal) {
+        } else if (rightVal > middleVal && rightVal >= leftVal) {
                 location = Location.Right;
                 telemetry.addData("Prop at", "Left");
-        } else {
+        } else if (middleVal >= rightVal && middleVal >= leftVal) {
                 location = Location.Middle;
                 telemetry.addData("Prop at", "Middle");
         }
