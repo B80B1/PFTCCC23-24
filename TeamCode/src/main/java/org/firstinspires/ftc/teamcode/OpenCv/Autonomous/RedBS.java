@@ -58,7 +58,7 @@ public class RedBS extends LinearOpMode {
         while (opModeIsActive()) {
 
             if (detector.location == TPDetectR.Location.Left) {
-                
+
             } else if (detector.location == TPDetectR.Location.Right) {
 
             } else {
