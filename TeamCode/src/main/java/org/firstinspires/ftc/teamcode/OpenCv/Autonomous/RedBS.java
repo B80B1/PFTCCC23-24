@@ -49,8 +49,14 @@ public class RedBS extends LinearOpMode {
                 break;
         }
         while (opModeIsActive()) {
-            // Don't burn CPU cycles busy-looping in this sample
-            sleep(50);
+
+            if (detector.location == TPDetectR.Location.Left) {
+
+            } else if (detector.location == TPDetectR.Location.Right) {
+
+            } else {
+
+            }
         }
 
         camera.stopStreaming();
