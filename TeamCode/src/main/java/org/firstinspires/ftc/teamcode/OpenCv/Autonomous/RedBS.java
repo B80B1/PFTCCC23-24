@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.OpenCv.Autonomous;
 
 
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.OpenCv.TPDetectR;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -37,6 +40,10 @@ public class RedBS extends LinearOpMode {
 
             }
         });
+        MecanumDrive drive;
+        drive = null;
+
+
 
 
         waitForStart();
@@ -51,11 +58,10 @@ public class RedBS extends LinearOpMode {
         while (opModeIsActive()) {
 
             if (detector.location == TPDetectR.Location.Left) {
-
+                
             } else if (detector.location == TPDetectR.Location.Right) {
 
             } else {
-
             }
         }
 
