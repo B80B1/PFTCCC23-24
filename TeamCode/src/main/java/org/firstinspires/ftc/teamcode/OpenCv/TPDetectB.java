@@ -66,9 +66,9 @@ public class TPDetectB extends OpenCvPipeline {
         Mat Right = mat.submat(RightArea);
         Mat Middle = mat.submat(MiddleArea);
 
-        double leftVal = Core.sumElems(Left).val[0];
-        double rightVal = Core.sumElems(Right).val[0];
-        double middleVal = Core.sumElems(Middle).val[0];
+        double leftVal = Core.sumElems(Left).val[1];
+        double rightVal = Core.sumElems(Right).val[1];
+        double middleVal = Core.sumElems(Middle).val[1];
 
         telemetry.addData("Left Raw Value", leftVal);
         telemetry.addData("Right Raw Value", rightVal);
