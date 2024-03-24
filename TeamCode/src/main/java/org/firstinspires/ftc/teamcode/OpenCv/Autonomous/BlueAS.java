@@ -56,34 +56,47 @@ public class BlueAS extends LinearOpMode {
             TPDetectB detector = new TPDetectB(telemetry);
             camera.setPipeline(detector);
 
-            Action trajectoryActionL;
-            Action trajectoryActionR;
-            Action trajectoryActionM;
+            Action trajectoryActionL1;
+            Action trajectoryActionR1;
+            Action trajectoryActionM1;
+            Action trajectoryActionL2;
+            Action trajectoryActionR2;
+            Action trajectoryActionM2;
             Action trajectoryEnd;
 
-            trajectoryActionL = drive.actionBuilder(drive.pose)
+            trajectoryActionL1 = drive.actionBuilder(drive.pose)
                     .splineTo(new Vector2d(-27.5, -40), Math.toRadians(0))
                     .waitSeconds(1)
                     .splineTo(new Vector2d(-10, -35), Math.toRadians(0))
                     .lineToY(15)
+                    .build();
+
+            trajectoryActionL2 = drive.actionBuilder(drive.pose)
                     .splineToConstantHeading(new Vector2d(-42.5, 55), Math.toRadians(0))
                     .build();
 
-            trajectoryActionR = drive.actionBuilder(drive.pose)
+            trajectoryActionR1 = drive.actionBuilder(drive.pose)
                     .splineTo(new Vector2d(-32.5, -32.5), Math.toRadians(0))
                     .waitSeconds(1)
                     .splineTo(new Vector2d(-10, -35), Math.toRadians(0))
                     .lineToY(15)
+                    .build();
+
+            trajectoryActionR2 = drive.actionBuilder(drive.pose)
                     .splineToConstantHeading(new Vector2d(-32.5, 55), Math.toRadians(0))
                     .build();
 
-            trajectoryActionM = drive.actionBuilder(drive.pose)
+            trajectoryActionM1 = drive.actionBuilder(drive.pose)
                     .splineTo(new Vector2d(-35, -32.5), Math.toRadians(0))
                     .waitSeconds(1)
                     .splineTo(new Vector2d(-10, -35), Math.toRadians(0))
                     .lineToY(15)
+                    .build();
+
+            trajectoryActionM2 = drive.actionBuilder(drive.pose)
                     .splineToConstantHeading(new Vector2d(-32.5, 55), Math.toRadians(0))
                     .build();
+
             trajectoryEnd = drive.actionBuilder(drive.pose)
                     .splineTo(new Vector2d(-60, 40), Math.toRadians(180))
                     //.splineTo(new Vector2d(-10, 40), Math.toRadians(180))
@@ -115,17 +128,23 @@ public class BlueAS extends LinearOpMode {
             while (opModeIsActive()) {
                 // Don't burn CPU cycles busy-looping in this sample
 
-                Action trajectoryChosenAction;
+                Action trajectoryChosenAction1;
+                Action trajectoryChosenAction2;
                 if (detector.location == TPDetectB.Location.Left) {
-                        trajectoryChosenAction = trajectoryActionL;
+                        trajectoryChosenAction1 = trajectoryActionL1;
+                        trajectoryChosenAction2 = trajectoryActionL2;
                 } else if (detector.location == TPDetectB.Location.Right) {
-                        trajectoryChosenAction = trajectoryActionR;
+                        trajectoryChosenAction1 = trajectoryActionR1;
+                        trajectoryChosenAction2 = trajectoryActionR2;
                 } else {
-                        trajectoryChosenAction = trajectoryActionM;
+                        trajectoryChosenAction1 = trajectoryActionM1;
+                        trajectoryChosenAction2 = trajectoryActionM2;
+
                 }
                 Actions.runBlocking(
                         new SequentialAction(
-                                trajectoryChosenAction,
+                                trajectoryChosenAction1,
+                                trajectoryChosenAction2,
                                 trajectoryEnd
                         )
                 );
