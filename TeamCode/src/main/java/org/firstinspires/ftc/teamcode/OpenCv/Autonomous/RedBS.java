@@ -119,7 +119,7 @@ public class RedBS extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(60, -35, Math.toRadians(270)));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(60, 12.5, Math.toRadians(90)));
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         OpenCvWebcam camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam 1"), cameraMonitorViewId);
         TPDetectR detector = new TPDetectR(telemetry);
@@ -134,6 +134,41 @@ public class RedBS extends LinearOpMode {
         Action trajectoryActionR2;
         Action trajectoryActionM2;
         Action trajectoryEnd;
+
+        trajectoryActionL1 = drive.actionBuilder(drive.pose)
+                .splineTo(new Vector2d(32.5, 10), Math.toRadians(180))
+                .waitSeconds(1)
+                .build();
+
+        trajectoryActionL2 = drive.actionBuilder(drive.pose)
+                .splineToConstantHeading(new Vector2d(25, 55), Math.toRadians(0))
+                .build();
+
+        trajectoryActionR1 = drive.actionBuilder(drive.pose)
+                .splineTo(new Vector2d(30, 7.5), Math.toRadians(0))
+                .waitSeconds(1)
+                .build();
+
+        trajectoryActionR2 = drive.actionBuilder(drive.pose)
+                .splineToConstantHeading(new Vector2d(35, 55), Math.toRadians(0))
+                .build();
+
+        trajectoryActionM1 = drive.actionBuilder(drive.pose)
+                .splineTo(new Vector2d(32.5, 15), Math.toRadians(90))
+                .waitSeconds(1)
+                .build();
+
+        trajectoryActionM2 = drive.actionBuilder(drive.pose)
+                .splineToConstantHeading(new Vector2d(40, 55), Math.toRadians(0))
+                .build();
+
+        trajectoryEnd = drive.actionBuilder(drive.pose)
+                .splineTo(new Vector2d(60, 40), Math.toRadians(180))
+                //.splineTo(new Vector2d(10, 40), Math.toRadians(180))
+                .lineToY(60)
+                .build();
+
+        Actions.runBlocking(pin.ClosePin());
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
@@ -161,25 +196,25 @@ public class RedBS extends LinearOpMode {
             Action trajectoryChosenAction1;
             Action trajectoryChosenAction2;
             if (detector.location == TPDetectR.Location.Left) {
-                //trajectoryChosenAction1 = trajectoryActionL1;
-                //trajectoryChosenAction2 = trajectoryActionL2;
+                trajectoryChosenAction1 = trajectoryActionL1;
+                trajectoryChosenAction2 = trajectoryActionL2;
             } else if (detector.location == TPDetectR.Location.Right) {
-                //trajectoryChosenAction1 = trajectoryActionR1;
-                //trajectoryChosenAction2 = trajectoryActionR2;
+                trajectoryChosenAction1 = trajectoryActionR1;
+                trajectoryChosenAction2 = trajectoryActionR2;
             } else {
-                //trajectoryChosenAction1 = trajectoryActionM1;
-                //trajectoryChosenAction2 = trajectoryActionM2;
+                trajectoryChosenAction1 = trajectoryActionM1;
+                trajectoryChosenAction2 = trajectoryActionM2;
 
             }
             Actions.runBlocking(
                     new SequentialAction(
-                           /* pin.ClosePin(),
+                            pin.ClosePin(),
                             trajectoryChosenAction1,
                             arm.ArmUp(),
                             pin.OpenPin(),
                             arm.ArmDown(),
                             trajectoryChosenAction2,
-                            trajectoryEnd*/
+                            trajectoryEnd
                     )
             );
 

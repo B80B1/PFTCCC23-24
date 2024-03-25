@@ -141,7 +141,7 @@ public class RedAS extends LinearOpMode {
         Action trajectoryEnd;
 
         trajectoryActionL1 = drive.actionBuilder(drive.pose)
-                .splineTo(new Vector2d(35, -47), Math.toRadians(0))
+                .splineTo(new Vector2d(35, -40), Math.toRadians(0))
                 .waitSeconds(1)
                 .splineTo(new Vector2d(10, -35), Math.toRadians(0))
                 .lineToY(35)
@@ -152,7 +152,7 @@ public class RedAS extends LinearOpMode {
                 .build();
 
         trajectoryActionR1 = drive.actionBuilder(drive.pose)
-                .splineTo(new Vector2d(25, -32.5), Math.toRadians(0))
+                .splineTo(new Vector2d(30, -40), Math.toRadians(0))
                 .waitSeconds(1)
                 .splineTo(new Vector2d(10, -35), Math.toRadians(0))
                 .lineToY(35)
@@ -163,7 +163,7 @@ public class RedAS extends LinearOpMode {
                 .build();
 
         trajectoryActionM1 = drive.actionBuilder(drive.pose)
-                .splineTo(new Vector2d(33, -25), Math.toRadians(0))
+                .splineTo(new Vector2d(35, -30), Math.toRadians(0))
                 .waitSeconds(1)
                 .splineTo(new Vector2d(10, -35), Math.toRadians(0))
                 .lineToY(35)
