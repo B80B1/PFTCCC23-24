@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.OpenCv.Autonomous;
 
 import static java.lang.Math.toRadians;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -32,21 +34,94 @@ public class BlueAS extends LinearOpMode {
     private static final int CAMERA_WIDTH = 1280; // width  of wanted camera resolution
     private static final int CAMERA_HEIGHT = 720; // height of wanted camera resolution
 
-    public class Arm {
+    private static class Arm {
         private DcMotor Arm;
 
-        public Arm(HardwareMap hardwareMap) {
+        public Arm (HardwareMap hardwareMap) {
             Arm = hardwareMap.get(DcMotor.class, "arm");
+            Arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            Arm.setDirection(DcMotor.Direction.FORWARD);
+        }
+
+        public class ArmUp implements Action {
+            private boolean initialized = false;
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                if (!initialized) {
+                    Arm.setPower(0.8);
+                    initialized = true;
+                }
+
+                double pos = Arm.getCurrentPosition();
+                packet.put("ArmPos", pos);
+                if (pos < 3000.0) {
+                    return true;
+                } else {
+                    Arm.setPower(0);
+                    return false;
+                }
+            }
+        }
+        public Action ArmUp() {
+            return new ArmUp();
+        }
+
+        public class ArmDown implements Action {
+            private boolean initialized = false;
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                if (!initialized) {
+                    Arm.setPower(-0.8);
+                    initialized = true;
+                }
+
+                double pos = Arm.getCurrentPosition();
+                packet.put("ArmPos", pos);
+                if (pos > 100.0) {
+                    return true;
+                } else {
+                    Arm.setPower(0);
+                    return false;
+                }
+            }
+        }
+        public Action ArmDown(){
+            return new ArmDown();
         }
     }
 
-    public class Pin {
+    private class Pin {
         private Servo Pin;
 
         public Pin(HardwareMap hardwareMap) {
             Pin = hardwareMap.get(Servo.class, "Intake");
             }
+        public class ClosePin implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                Pin.setPosition(0.55);
+                return false;
+            }
         }
+        public Action ClosePin() {
+            return new ClosePin();
+        }
+
+        public class OpenPin implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                Pin.setPosition(1.0);
+                return false;
+            }
+        }
+        public Action OpenPin() {
+            return new OpenPin();
+        }
+    }
+
+
 
         @Override
         public void runOpMode() throws InterruptedException {
@@ -55,6 +130,8 @@ public class BlueAS extends LinearOpMode {
             OpenCvWebcam camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam 1"), cameraMonitorViewId);
             TPDetectB detector = new TPDetectB(telemetry);
             camera.setPipeline(detector);
+            Pin pin = new Pin(hardwareMap);
+            Arm arm = new Arm(hardwareMap);
 
             Action trajectoryActionL1;
             Action trajectoryActionR1;
@@ -103,6 +180,8 @@ public class BlueAS extends LinearOpMode {
                     .lineToY(60)
                     .build();
 
+            Actions.runBlocking(pin.ClosePin());
+
             camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
                 @Override
                 public void onOpened() {
@@ -144,6 +223,9 @@ public class BlueAS extends LinearOpMode {
                 Actions.runBlocking(
                         new SequentialAction(
                                 trajectoryChosenAction1,
+                                arm.ArmUp(),
+                                pin.OpenPin(),
+                                arm.ArmDown(),
                                 trajectoryChosenAction2,
                                 trajectoryEnd
                         )
