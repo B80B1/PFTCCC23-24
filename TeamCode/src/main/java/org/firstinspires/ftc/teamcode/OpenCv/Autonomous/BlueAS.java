@@ -153,7 +153,7 @@ public class BlueAS extends LinearOpMode {
                     .build();
 
             trajectoryActionR1 = drive.actionBuilder(drive.pose)
-                    .splineTo(new Vector2d(-32.5, -32.5), Math.toRadians(0))
+                    .splineTo(new Vector2d(-32.5, -32.5), Math.toRadians(180))
                     .waitSeconds(1)
                     .splineTo(new Vector2d(-10, -35), Math.toRadians(0))
                     .lineToY(15)
@@ -164,7 +164,7 @@ public class BlueAS extends LinearOpMode {
                     .build();
 
             trajectoryActionM1 = drive.actionBuilder(drive.pose)
-                    .splineTo(new Vector2d(-35, -32.5), Math.toRadians(0))
+                    .splineTo(new Vector2d(-35, -32.5), Math.toRadians(270))
                     .waitSeconds(1)
                     .splineTo(new Vector2d(-10, -35), Math.toRadians(0))
                     .lineToY(15)
