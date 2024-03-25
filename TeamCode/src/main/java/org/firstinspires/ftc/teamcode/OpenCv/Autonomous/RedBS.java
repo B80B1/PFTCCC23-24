@@ -141,7 +141,7 @@ public class RedBS extends LinearOpMode {
                 .build();
 
         trajectoryActionL2 = drive.actionBuilder(drive.pose)
-                .splineToConstantHeading(new Vector2d(25, 55), Math.toRadians(0))
+                .splineTo(new Vector2d(25, 55), Math.toRadians(0))
                 .build();
 
         trajectoryActionR1 = drive.actionBuilder(drive.pose)
@@ -150,7 +150,7 @@ public class RedBS extends LinearOpMode {
                 .build();
 
         trajectoryActionR2 = drive.actionBuilder(drive.pose)
-                .splineToConstantHeading(new Vector2d(35, 55), Math.toRadians(0))
+                .splineTo(new Vector2d(35, 55), Math.toRadians(0))
                 .build();
 
         trajectoryActionM1 = drive.actionBuilder(drive.pose)
@@ -159,11 +159,11 @@ public class RedBS extends LinearOpMode {
                 .build();
 
         trajectoryActionM2 = drive.actionBuilder(drive.pose)
-                .splineToConstantHeading(new Vector2d(40, 55), Math.toRadians(0))
+                .splineTo(new Vector2d(40, 55), Math.toRadians(0))
                 .build();
 
         trajectoryEnd = drive.actionBuilder(drive.pose)
-                .splineTo(new Vector2d(60, 40), Math.toRadians(180))
+                .lineToYSplineHeading(40, Math.toRadians(180))
                 //.splineTo(new Vector2d(10, 40), Math.toRadians(180))
                 .lineToY(60)
                 .build();
