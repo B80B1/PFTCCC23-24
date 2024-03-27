@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.OpenCv.Autonomous;
 
+import static org.firstinspires.ftc.teamcode.OpenCv.TPDetectR.Location.Left;
+import static org.firstinspires.ftc.teamcode.OpenCv.TPDetectR.Location.Right;
+
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -136,7 +139,7 @@ public class RedBS extends LinearOpMode {
         Action trajectoryEnd;
 
         trajectoryActionL1 = drive.actionBuilder(drive.pose)
-                .splineTo(new Vector2d(32.5, 10), Math.toRadians(180))
+                .lineToY(40)
                 .waitSeconds(1)
                 .build();
 
@@ -192,33 +195,27 @@ public class RedBS extends LinearOpMode {
             case Middle:
                 break;
         }
+        Action trajectoryChosenAction1;
+        Action trajectoryChosenAction2;
+        if (detector.location == Left) {
+            trajectoryChosenAction1 = trajectoryActionL1;
+            trajectoryChosenAction2 = trajectoryActionL2;
+        } else if (detector.location == Right) {
+            trajectoryChosenAction1 = trajectoryActionR1;
+            trajectoryChosenAction2 = trajectoryActionR2;
+        } else {
+            trajectoryChosenAction1 = trajectoryActionM1;
+            trajectoryChosenAction2 = trajectoryActionM2;
+        }
         while (opModeIsActive()) {
-            Action trajectoryChosenAction1;
-            Action trajectoryChosenAction2;
-            if (detector.location == TPDetectR.Location.Left) {
-                trajectoryChosenAction1 = trajectoryActionL1;
-                trajectoryChosenAction2 = trajectoryActionL2;
-            } else if (detector.location == TPDetectR.Location.Right) {
-                trajectoryChosenAction1 = trajectoryActionR1;
-                trajectoryChosenAction2 = trajectoryActionR2;
-            } else {
-                trajectoryChosenAction1 = trajectoryActionM1;
-                trajectoryChosenAction2 = trajectoryActionM2;
 
-            }
+            telemetry.addData("Detector If Statement", detector.location);
+            telemetry.update();
+
             Actions.runBlocking(
                     new SequentialAction(
-                            pin.ClosePin(),
                             trajectoryChosenAction1,
-                            arm.ArmUp(),
-                            pin.OpenPin(),
-                            arm.ArmDown(),
-                            trajectoryChosenAction2,
-                            trajectoryEnd
-                    )
-            );
-
-        camera.stopStreaming();
+                            trajectoryEnd));
+            }
     }
-}
-}
+    }
