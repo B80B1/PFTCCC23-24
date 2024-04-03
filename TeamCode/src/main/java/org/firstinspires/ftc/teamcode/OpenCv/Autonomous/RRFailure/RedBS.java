@@ -1,10 +1,9 @@
-package org.firstinspires.ftc.teamcode.OpenCv.Autonomous;
+package org.firstinspires.ftc.teamcode.OpenCv.Autonomous.RRFailure;
 
+import static org.firstinspires.ftc.teamcode.OpenCv.TPDetectR.Location.Left;
+import static org.firstinspires.ftc.teamcode.OpenCv.TPDetectR.Location.Right;
 
 import androidx.annotation.NonNull;
-
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -27,9 +26,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-
 @Autonomous
-public class RedAS extends LinearOpMode {
+public class RedBS extends LinearOpMode {
 
     OpenCvCamera webcam1;
     private static final int CAMERA_WIDTH = 1280; // width  of wanted camera resolution
@@ -107,7 +105,7 @@ public class RedAS extends LinearOpMode {
             }
         }
         public Action ClosePin() {
-            return new ClosePin();
+            return new Pin.ClosePin();
         }
 
         public class OpenPin implements Action {
@@ -118,13 +116,13 @@ public class RedAS extends LinearOpMode {
             }
         }
         public Action OpenPin() {
-            return new OpenPin();
+            return new Pin.OpenPin();
         }
     }
 
     @Override
     public void runOpMode() throws InterruptedException {
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(60, -35, Math.toRadians(270)));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(60, 12.5, Math.toRadians(90)));
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         OpenCvWebcam camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam 1"), cameraMonitorViewId);
         TPDetectR detector = new TPDetectR(telemetry);
@@ -141,41 +139,35 @@ public class RedAS extends LinearOpMode {
         Action trajectoryEnd;
 
         trajectoryActionL1 = drive.actionBuilder(drive.pose)
-                .splineTo(new Vector2d(35, -40), Math.toRadians(0))
+                .lineToY(40)
                 .waitSeconds(1)
-                .splineTo(new Vector2d(10, -35), Math.toRadians(0))
-                .lineToY(35)
                 .build();
 
         trajectoryActionL2 = drive.actionBuilder(drive.pose)
-                .splineToConstantHeading(new Vector2d(29, 57.5), Math.toRadians(0))
+                .splineTo(new Vector2d(25, 55), Math.toRadians(0))
                 .build();
 
         trajectoryActionR1 = drive.actionBuilder(drive.pose)
-                .splineTo(new Vector2d(30, -40), Math.toRadians(0))
+                .splineTo(new Vector2d(30, 7.5), Math.toRadians(0))
                 .waitSeconds(1)
-                .splineTo(new Vector2d(10, -35), Math.toRadians(0))
-                .lineToY(35)
                 .build();
 
         trajectoryActionR2 = drive.actionBuilder(drive.pose)
-                .splineToConstantHeading(new Vector2d(35, 57.5), Math.toRadians(0))
+                .splineTo(new Vector2d(35, 55), Math.toRadians(0))
                 .build();
 
         trajectoryActionM1 = drive.actionBuilder(drive.pose)
-                .splineTo(new Vector2d(35, -30), Math.toRadians(0))
+                .splineTo(new Vector2d(32.5, 15), Math.toRadians(90))
                 .waitSeconds(1)
-                .splineTo(new Vector2d(10, -35), Math.toRadians(0))
-                .lineToY(35)
                 .build();
 
         trajectoryActionM2 = drive.actionBuilder(drive.pose)
-                .splineToConstantHeading(new Vector2d(41, 52.5), Math.toRadians(0))
+                .splineTo(new Vector2d(40, 55), Math.toRadians(0))
                 .build();
 
         trajectoryEnd = drive.actionBuilder(drive.pose)
-                .splineTo(new Vector2d(10, 35), Math.toRadians(180))
-                //.splineTo(new Vector2d(60, 35), Math.toRadians(180))
+                .lineToYSplineHeading(40, Math.toRadians(180))
+                //.splineTo(new Vector2d(10, 40), Math.toRadians(180))
                 .lineToY(60)
                 .build();
 
@@ -193,6 +185,7 @@ public class RedAS extends LinearOpMode {
             }
         });
 
+
         waitForStart();
         switch (detector.location) {
             case Right:
@@ -202,35 +195,27 @@ public class RedAS extends LinearOpMode {
             case Middle:
                 break;
         }
-
+        Action trajectoryChosenAction1;
+        Action trajectoryChosenAction2;
+        if (detector.location == Left) {
+            trajectoryChosenAction1 = trajectoryActionL1;
+            trajectoryChosenAction2 = trajectoryActionL2;
+        } else if (detector.location == Right) {
+            trajectoryChosenAction1 = trajectoryActionR1;
+            trajectoryChosenAction2 = trajectoryActionR2;
+        } else {
+            trajectoryChosenAction1 = trajectoryActionM1;
+            trajectoryChosenAction2 = trajectoryActionM2;
+        }
         while (opModeIsActive()) {
 
-            Action trajectoryChosenAction1;
-            Action trajectoryChosenAction2;
-            if (detector.location == TPDetectR.Location.Left) {
-                trajectoryChosenAction1 = trajectoryActionL1;
-                trajectoryChosenAction2 = trajectoryActionL2;
-            } else if (detector.location == TPDetectR.Location.Right) {
-                trajectoryChosenAction1 = trajectoryActionR1;
-                trajectoryChosenAction2 = trajectoryActionR2;
-            } else {
-                trajectoryChosenAction1 = trajectoryActionM1;
-                trajectoryChosenAction2 = trajectoryActionM2;
+            telemetry.addData("Detector If Statement", detector.location);
+            telemetry.update();
 
-            }
             Actions.runBlocking(
                     new SequentialAction(
-                            pin.ClosePin(),
                             trajectoryChosenAction1,
-                            arm.ArmUp(),
-                            pin.OpenPin(),
-                            arm.ArmDown(),
-                            trajectoryChosenAction2,
-                            trajectoryEnd
-                    )
-            );
-        }
-
-        camera.stopStreaming();
+                            trajectoryEnd));
+            }
     }
-}
+    }

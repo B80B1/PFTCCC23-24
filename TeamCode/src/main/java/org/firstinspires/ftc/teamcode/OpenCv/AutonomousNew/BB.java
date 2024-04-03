@@ -27,11 +27,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.OpenCv.AutonomousNew;
 
 import android.app.Activity;
 import android.view.View;
-
+import androidx.annotation.NonNull;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.OpenCv.TPDetectB;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvWebcam;
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.Vector2d;
+import com.acmerobotics.roadrunner.ftc.Actions;
+import com.acmerobotics.roadrunner.ParallelAction;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -62,11 +82,15 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this Op Mode to the Driver Station OpMode list
  */
-@Autonomous(name = "Blue Land")
+@Autonomous(name = "Blue Backstage")
 
-public class CSAuto4AS extends LinearOpMode {
+public class BB extends LinearOpMode {
 
-public void encoderDrive(double rspeed, double fspeed,
+    OpenCvCamera webcam1;
+    private static final int CAMERA_WIDTH = 1280; // width  of wanted camera resolution
+    private static final int CAMERA_HEIGHT = 720; // height of wanted camera resolution
+
+    public void encoderDrive(double rspeed, double fspeed,
                              double backleftInches, double backrightInches,
                              double frontleftInches, double frontrightInches, double timeoutS) {
                                  
@@ -209,7 +233,10 @@ public void encoderDrive(double rspeed, double fspeed,
     static final double     SLIDE_SPEED            =0.15;
     
   @Override public void runOpMode() {
-    
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        OpenCvWebcam camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam 1"), cameraMonitorViewId);
+        TPDetectB detector = new TPDetectB(telemetry);
+        camera.setPipeline(detector);
         backleftDrive  = hardwareMap.get(DcMotor.class, "leftBack");
         backrightDrive = hardwareMap.get(DcMotor.class, "rightBack");
         frontleftDrive = hardwareMap.get(DcMotor.class, "leftFront");
@@ -254,27 +281,51 @@ public void encoderDrive(double rspeed, double fspeed,
     // color of the Robot Controller app to match the hue detected by the RGB sensor.
     int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
     relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
-       
-    
 
+
+      camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+          @Override
+          public void onOpened() {
+              camera.startStreaming(1280,720, OpenCvCameraRotation.UPRIGHT);
+          }
+
+          @Override
+          public void onError(int errorCode) {
+
+          }
+      });
+
+      switch (detector.location) {
+          case Right:
+              break;
+          case Left:
+              break;
+          case Middle:
+              break;
+      }
     // Wait for the start button to be pressed.
     waitForStart();
 
     // Loop until we are asked to stop
     while (opModeIsActive()) {
-             	pin.setPosition(0.4);
-		arm.setPower(0.05);
-                encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, -5.5, 5.5, 5.5, -5.5, 1.5);
-                sleep(500);
-                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 90, 90, 90, 90, 3.0);
-		arm.setPower(0);
-		pin.setPosition(1);
-                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -6, -6, -6, -6, 3.0);
-		arm.setPower(0.05);
-		encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, -8, 8, 8, -8, 1.5);
-		encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 6, 6, 6, 6, 2.0);
-                sleep(10000000);
-                }
+        if (detector.location == TPDetectB.Location.Left) {
+            pin.setPosition(0.4);
+            arm.setPower(0.05);
+            encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, -5.5, 5.5, 5.5, -5.5, 1.5);
+            sleep(500);
+            encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 46, 46, 46, 46, 3.0);
+            arm.setPower(0);
+            pin.setPosition(1);
+            encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -6, -6, -6, -6, 3.0);
+            arm.setPower(0.05);
+            encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, -8, 8, 8, -8, 1.5);
+            encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 6, 6, 6, 6, 2.0);
+            sleep(10000000);
+        } else if (detector.location == TPDetectB.Location.Right) {
+
+        } else {
+
+        }}
       // Explain basic gain information via telemetry
       
       /* Use telemetry to display feedback on the driver station. We show the red, green, and blue

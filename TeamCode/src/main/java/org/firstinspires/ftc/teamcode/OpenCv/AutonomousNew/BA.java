@@ -27,36 +27,37 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.OpenCv.AutonomousNew;
 
 import android.app.Activity;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import android.graphics.Color;
 import android.view.View;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import androidx.annotation.NonNull;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.MecanumDrive;
+import org.firstinspires.ftc.teamcode.OpenCv.TPDetectB;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvWebcam;
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.Vector2d;
+import com.acmerobotics.roadrunner.ftc.Actions;
+import com.acmerobotics.roadrunner.ParallelAction;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import java.util.List;
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
-import com.qualcomm.robotcore.hardware.SwitchableLight;
-import com.qualcomm.robotcore.hardware.LED;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
-
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 /**
  * This is an example LinearOpMode that shows how to use a color sensor in a generic
@@ -81,14 +82,18 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this Op Mode to the Driver Station OpMode list
  */
-@Autonomous(name = "Red")
+@Autonomous(name = "Blue Audience")
 
-public class CSAuto1AS extends LinearOpMode {
+public class BA extends LinearOpMode {
 
-public void encoderDrive(double rspeed, double fspeed,
+    OpenCvCamera webcam1;
+    private static final int CAMERA_WIDTH = 1280; // width  of wanted camera resolution
+    private static final int CAMERA_HEIGHT = 720; // height of wanted camera resolution
+
+    public void encoderDrive(double rspeed, double fspeed,
                              double backleftInches, double backrightInches,
                              double frontleftInches, double frontrightInches, double timeoutS) {
-                                 
+
         int newbackLeftTarget;
         int newbackRightTarget;
         int newfrontLeftTarget;
@@ -102,7 +107,7 @@ public void encoderDrive(double rspeed, double fspeed,
             newbackRightTarget = backrightDrive.getCurrentPosition() + (int)(backrightInches * COUNTS_PER_INCH);
             newfrontLeftTarget = frontleftDrive.getCurrentPosition() + (int)(frontleftInches * COUNTS_PER_INCH);
             newfrontRightTarget = frontrightDrive.getCurrentPosition() + (int)(frontrightInches * COUNTS_PER_INCH);
-            
+
             backleftDrive.setTargetPosition(newbackLeftTarget);
             backrightDrive.setTargetPosition(newbackRightTarget);
             frontleftDrive.setTargetPosition(newfrontLeftTarget);
@@ -113,8 +118,8 @@ public void encoderDrive(double rspeed, double fspeed,
             backrightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             frontleftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             frontrightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-           
-            
+
+
             // reset the timeout time and start motion.
             runtime.reset();
             backleftDrive.setPower(Math.abs(rspeed));
@@ -128,11 +133,11 @@ public void encoderDrive(double rspeed, double fspeed,
             // always end the motion as soon as possible.
             // However, if you require that BOTH motors have finished their moves before the robot continues
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
-            while (opModeIsActive()  &&                 
-            (runtime.seconds() < timeoutS)) {
+            while (opModeIsActive()  &&
+                    (runtime.seconds() < timeoutS)) {
 
                 // Display it for the driver.
-               /* telemetry.addData("Running to",  " %7d :%7d  :%7d  :%7d", newfrontLeftTarget,  newfrontRightTarget,  
+               /* telemetry.addData("Running to",  " %7d :%7d  :%7d  :%7d", newfrontLeftTarget,  newfrontRightTarget,
                                                                           newbackLeftTarget,  newbackRightTarget);
                 telemetry.addData("Currently at",  " at %7d :%7d  :%7d  :%7d",
                                             frontleftDrive.getCurrentPosition(), frontrightDrive.getCurrentPosition(),
@@ -155,21 +160,21 @@ public void encoderDrive(double rspeed, double fspeed,
             sleep(10);   // optional pause after each move.
         }
     }
-    
-        public void slideEncoderDrive(double sSpeed, double slideRightInches,
-                                    double slideLeftInches, double timeoutS) {
-        
+
+    public void slideEncoderDrive(double sSpeed, double slideRightInches,
+                                  double slideLeftInches, double timeoutS) {
+
         int newSlideRightTarget;
         int newSlideLeftTarget;
-        
+
         if (opModeIsActive()) {
 
-            
+
 
             while (opModeIsActive() &&
-                   (runtime.seconds() < timeoutS)) {
+                    (runtime.seconds() < timeoutS)) {
                 // Display it for the driver.
-               /* telemetry.addData("Running to",  " %7d :%7d  :%7d  :%7d", newfrontLeftTarget,  newfrontRightTarget,  
+               /* telemetry.addData("Running to",  " %7d :%7d  :%7d  :%7d", newfrontLeftTarget,  newfrontRightTarget,
                                                                           newbackLeftTarget,  newbackRightTarget);
                 telemetry.addData("Currently at",  " at %7d :%7d  :%7d  :%7d",
                                             frontleftDrive.getCurrentPosition(), frontrightDrive.getCurrentPosition(),
@@ -181,31 +186,31 @@ public void encoderDrive(double rspeed, double fspeed,
 
             sleep(0);   // optional pause after each move.
         }
-                                    }
-  /** The colorSensor field will contain a reference to our color sensor hardware object */
-  NormalizedColorSensor colorSensor;
+    }
+    /** The colorSensor field will contain a reference to our color sensor hardware object */
+    NormalizedColorSensor colorSensor;
 
-  /** The relativeLayout field is used to aid in providing interesting visual feedback
-   * in this sample application; you probably *don't* need this when you use a color sensor on your
-   * robot. Note that you won't see anything change on the Driver Station, only on the Robot Controller. */
-  View relativeLayout;
+    /** The relativeLayout field is used to aid in providing interesting visual feedback
+     * in this sample application; you probably *don't* need this when you use a color sensor on your
+     * robot. Note that you won't see anything change on the Driver Station, only on the Robot Controller. */
+    View relativeLayout;
 
-  /**
-   * The runOpMode() method is the root of this Op Mode, as it is in all LinearOpModes.
-   * Our implementation here, though is a bit unusual: we've decided to put all the actual work
-   * in the runSample() method rather than directly in runOpMode() itself. The reason we do that is
-   * that in this sample we're changing the background color of the robot controller screen as the
-   * Op Mode runs, and we want to be able to *guarantee* that we restore it to something reasonable
-   * and palatable when the Op Mode ends. The simplest way to do that is to use a try...finally
-   * block around the main, core logic, and an easy way to make that all clear was to separate
-   * the former from the latter in separate methods.
-   */
+    /**
+     * The runOpMode() method is the root of this Op Mode, as it is in all LinearOpModes.
+     * Our implementation here, though is a bit unusual: we've decided to put all the actual work
+     * in the runSample() method rather than directly in runOpMode() itself. The reason we do that is
+     * that in this sample we're changing the background color of the robot controller screen as the
+     * Op Mode runs, and we want to be able to *guarantee* that we restore it to something reasonable
+     * and palatable when the Op Mode ends. The simplest way to do that is to use a try...finally
+     * block around the main, core logic, and an easy way to make that all clear was to separate
+     * the former from the latter in separate methods.
+     */
     private DcMotor         backleftDrive   = null;
     private DcMotor         backrightDrive  = null;
     private DcMotor         frontleftDrive = null;
     private DcMotor         frontrightDrive = null;
     private DcMotor         arm = null;
-    private Servo           pin;
+    private Servo pin;
     private ElapsedTime     runtime = new ElapsedTime();
 
     // Calculate the COUNTS_PER_INCH for your specific drive train.
@@ -219,44 +224,47 @@ public void encoderDrive(double rspeed, double fspeed,
     static final double     WHEEL_DIAMETER_INCHES   = 3.78 ;     // For figuring circumference
     static final double     SLIDE_DIAMETER_INCHES   = 1.43 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-                                                      (WHEEL_DIAMETER_INCHES * 3.14159);
+            (WHEEL_DIAMETER_INCHES * 3.14159);
     static final double     SLIDE_COUNTS_PER_INCH   =(COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-                                                      (SLIDE_DIAMETER_INCHES * 3.14159);
+            (SLIDE_DIAMETER_INCHES * 3.14159);
     static final double     F_DRIVE_SPEED             = 1;
     static final double     R_DRIVE_SPEED             = 1;
     static final double     TURN_SPEED              = 0.2;
     static final double     SLIDE_SPEED            =0.15;
-    
-  @Override public void runOpMode() {
-    
+
+    @Override public void runOpMode() {
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        OpenCvWebcam camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam 1"), cameraMonitorViewId);
+        TPDetectB detector = new TPDetectB(telemetry);
+        camera.setPipeline(detector);
         backleftDrive  = hardwareMap.get(DcMotor.class, "leftBack");
         backrightDrive = hardwareMap.get(DcMotor.class, "rightBack");
         frontleftDrive = hardwareMap.get(DcMotor.class, "leftFront");
         frontrightDrive = hardwareMap.get(DcMotor.class, "rightFront");
-	arm = hardwareMap.get(DcMotor.class, "arm");
-	pin = hardwareMap.get(Servo.class, "Intake");
+        arm = hardwareMap.get(DcMotor.class, "arm");
+        pin = hardwareMap.get(Servo.class, "Intake");
         //redA = hardwareMap.get(DigitalChannel.class, "red");
         //greenA = hardwareMap.get(DigitalChannel.class, "green");
         //redB = hardwareMap.get(DigitalChannel.class, "red2");
         //greenB = hardwareMap.get(DigitalChannel.class, "green2");
-        
+
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
-        // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction //flips
+        // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
         frontleftDrive.setDirection(DcMotor.Direction.REVERSE);
         frontrightDrive.setDirection(DcMotor.Direction.FORWARD);
         backleftDrive.setDirection(DcMotor.Direction.REVERSE);
         backrightDrive.setDirection(DcMotor.Direction.FORWARD);//MAY NEED TO CHANGE TO REVERSE
-        
-        
-        
+
+
+
 
         frontleftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontrightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backleftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backrightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        
+
         frontleftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontrightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backleftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -269,42 +277,65 @@ public void encoderDrive(double rspeed, double fspeed,
                           backleftDrive.getCurrentPosition(),
                           backrightDrive.getCurrentPosition());*/
 
-    // Get a reference to the RelativeLayout so we can later change the background
-    // color of the Robot Controller app to match the hue detected by the RGB sensor.
-    int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
-    relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
-       
-    
+        // Get a reference to the RelativeLayout so we can later change the background
+        // color of the Robot Controller app to match the hue detected by the RGB sensor.
+        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
+        relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
 
-    // Wait for the start button to be pressed.
-    waitForStart();
 
-    // Loop until we are asked to stop
-    while (opModeIsActive()) {
-		pin.setPosition(0.4);
-		arm.setPower(0.05);
-                encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, 5.5, -5.5, -5.5, 5.5, 1.5);
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                camera.startStreaming(1280,720, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+
+            }
+        });
+
+        switch (detector.location) {
+            case Right:
+                break;
+            case Left:
+                break;
+            case Middle:
+                break;
+        }
+        // Wait for the start button to be pressed.
+        waitForStart();
+
+        // Loop until we are asked to stop
+        while (opModeIsActive()) {
+            if (detector.location == TPDetectB.Location.Left) {
+                pin.setPosition(0.4);
+                arm.setPower(0.05);
+                encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, -5.5, 5.5, 5.5, -5.5, 1.5);
                 sleep(500);
                 encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 46, 46, 46, 46, 3.0);
-		arm.setPower(0);
-		pin.setPosition(1);
+                arm.setPower(0);
+                pin.setPosition(1);
                 encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -6, -6, -6, -6, 3.0);
-		arm.setPower(0.05);
-		encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, 8, -8, -8, 8, 1.5);
-		encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 6, 6, 6, 6, 2.0);
+                arm.setPower(0.05);
+                encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, -8, 8, 8, -8, 1.5);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 6, 6, 6, 6, 2.0);
                 sleep(10000000);
-                
-}
-      // Explain basic gain information via telemetry
-      
-      /* Use telemetry to display feedback on the driver station. We show the red, green, and blue
-       * normalized values from the sensor (in the range of 0 to 1), as well as the equivalent
-       * HSV (hue, saturation and value) values. See http://web.archive.org/web/20190311170843/https://infohost.nmt.edu/tcc/help/pubs/colortheory/web/hsv.html
-       * for an explanation of HSV color. */
+            } else if (detector.location == TPDetectB.Location.Right) {
 
-      // Update the hsvValues array by passing it to Color.colorToHSV()
+            } else {
 
-      // Change the Robot Controller's background color to match the color detected by the color sensor.
-        }
+            }}
+        // Explain basic gain information via telemetry
+
+        /* Use telemetry to display feedback on the driver station. We show the red, green, and blue
+         * normalized values from the sensor (in the range of 0 to 1), as well as the equivalent
+         * HSV (hue, saturation and value) values. See http://web.archive.org/web/20190311170843/https://infohost.nmt.edu/tcc/help/pubs/colortheory/web/hsv.html
+         * for an explanation of HSV color. */
+
+        // Update the hsvValues array by passing it to Color.colorToHSV()
+
+        // Change the Robot Controller's background color to match the color detected by the color sensor.
     }
+}
 

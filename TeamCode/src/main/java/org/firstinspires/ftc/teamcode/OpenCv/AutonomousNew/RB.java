@@ -27,17 +27,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.OpenCv.AutonomousNew;
+import static org.firstinspires.ftc.teamcode.OpenCv.TPDetectR.Location.Left;
+import static org.firstinspires.ftc.teamcode.OpenCv.TPDetectR.Location.Right;
 
 import android.app.Activity;
-import android.view.View;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+
+import android.view.View;
+
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+
+import org.firstinspires.ftc.teamcode.OpenCv.TPDetectR;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvWebcam;
+
 
 /**
  * This is an example LinearOpMode that shows how to use a color sensor in a generic
@@ -62,14 +76,19 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this Op Mode to the Driver Station OpMode list
  */
-@Autonomous(name = "Blue")
+@Autonomous(name = "Red Backstage")
 
-public class CSAuto3AS extends LinearOpMode {
+public class RB extends LinearOpMode {
+
+    OpenCvCamera webcam1;
+    private static final int CAMERA_WIDTH = 1280; // width  of wanted camera resolution
+    private static final int CAMERA_HEIGHT = 720; // height of wanted camera resolution
 
 public void encoderDrive(double rspeed, double fspeed,
                              double backleftInches, double backrightInches,
                              double frontleftInches, double frontrightInches, double timeoutS) {
-                                 
+
+
         int newbackLeftTarget;
         int newbackRightTarget;
         int newfrontLeftTarget;
@@ -186,7 +205,7 @@ public void encoderDrive(double rspeed, double fspeed,
     private DcMotor         frontleftDrive = null;
     private DcMotor         frontrightDrive = null;
     private DcMotor         arm = null;
-    private Servo pin;
+    private Servo           pin;
     private ElapsedTime     runtime = new ElapsedTime();
 
     // Calculate the COUNTS_PER_INCH for your specific drive train.
@@ -209,13 +228,16 @@ public void encoderDrive(double rspeed, double fspeed,
     static final double     SLIDE_SPEED            =0.15;
     
   @Override public void runOpMode() {
-    
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        OpenCvWebcam camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam 1"), cameraMonitorViewId);
+        TPDetectR detector = new TPDetectR(telemetry);
+        camera.setPipeline(detector);
         backleftDrive  = hardwareMap.get(DcMotor.class, "leftBack");
         backrightDrive = hardwareMap.get(DcMotor.class, "rightBack");
         frontleftDrive = hardwareMap.get(DcMotor.class, "leftFront");
         frontrightDrive = hardwareMap.get(DcMotor.class, "rightFront");
-	arm = hardwareMap.get(DcMotor.class, "arm");
-	pin = hardwareMap.get(Servo.class, "Intake");
+	    arm = hardwareMap.get(DcMotor.class, "arm");
+	    pin = hardwareMap.get(Servo.class, "Intake");
         //redA = hardwareMap.get(DigitalChannel.class, "red");
         //greenA = hardwareMap.get(DigitalChannel.class, "green");
         //redB = hardwareMap.get(DigitalChannel.class, "red2");
@@ -223,7 +245,7 @@ public void encoderDrive(double rspeed, double fspeed,
         
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
-        // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
+        // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction //flips
         frontleftDrive.setDirection(DcMotor.Direction.REVERSE);
         frontrightDrive.setDirection(DcMotor.Direction.FORWARD);
         backleftDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -258,23 +280,46 @@ public void encoderDrive(double rspeed, double fspeed,
     
 
     // Wait for the start button to be pressed.
-    waitForStart();
+      camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+          @Override
+          public void onOpened() {
+              camera.startStreaming(1280,720, OpenCvCameraRotation.UPRIGHT);
+          }
+
+          @Override
+          public void onError(int errorCode) {
+
+          }
+      });
+
+      switch (detector.location) {
+          case Right:
+              break;
+          case Left:
+              break;
+          case Middle:
+              break;
+      }
 
     // Loop until we are asked to stop
     while (opModeIsActive()) {
-                pin.setPosition(0.4);
-		arm.setPower(0.05);
-                encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, -5.5, 5.5, 5.5, -5.5, 1.5);
-                sleep(500);
-                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 46, 46, 46, 46, 3.0);
-		arm.setPower(0);
-		pin.setPosition(1);
-                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -6, -6, -6, -6, 3.0);
-		arm.setPower(0.05);
-		encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, -8, 8, 8, -8, 1.5);
-		encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 6, 6, 6, 6, 2.0);
-                sleep(10000000);
-                }
+        if (detector.location == Left) {
+            pin.setPosition(0.4);
+		    arm.setPower(0.05);
+            encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, 5.5, -5.5, -5.5, 5.5, 1.5);
+            sleep(500);
+            encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 46, 46, 46, 46, 3.0);
+		    arm.setPower(0);
+		    pin.setPosition(1);
+            encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -6, -6, -6, -6, 3.0);
+		    arm.setPower(0.05);
+		    encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, 8, -8, -8, 8, 1.5);
+		    encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 6, 6, 6, 6, 2.0);
+            sleep(10000000);
+         } else if (detector.location == Right) {
+        } else {
+        }
+}
       // Explain basic gain information via telemetry
       
       /* Use telemetry to display feedback on the driver station. We show the red, green, and blue
