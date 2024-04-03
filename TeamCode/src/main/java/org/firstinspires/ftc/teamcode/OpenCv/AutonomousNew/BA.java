@@ -311,21 +311,42 @@ public class BA extends LinearOpMode {
             if (detector.location == TPDetectB.Location.Left) {
                 pin.setPosition(0.4);
                 arm.setPower(0.05);
-                encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, -5.5, 5.5, 5.5, -5.5, 1.5);
+                encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, 5.5, -5.5, -5.5, 5.5, 1.5);
                 sleep(500);
-                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 46, 46, 46, 46, 3.0);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 23, 23, 23, 23, 3.0);
                 arm.setPower(0);
                 pin.setPosition(1);
-                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -6, -6, -6, -6, 3.0);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -8, -8, -8, -8, 3.0);
                 arm.setPower(0.05);
-                encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, -8, 8, 8, -8, 1.5);
-                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 6, 6, 6, 6, 2.0);
+                encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, -16, 16, -16, 16, 1.5);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -6, 6, 6, -6, 2.0);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 56, 56, 56, 56, 6.0);
                 sleep(10000000);
             } else if (detector.location == TPDetectB.Location.Right) {
-
+                encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, -5.5, 5.5, 5.5, -5.5, 1.5);
+                sleep(500);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 23, 23, 23, 23, 3.0);
+                arm.setPower(0);
+                pin.setPosition(1);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -8, -8, -8, -8, 3.0);
+                arm.setPower(0.05);
+                encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, -16, 16, -16, 16, 1.5);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -6, 6, 6, -6, 2.0);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 56, 56, 56, 56, 6.0);
+                sleep(10000000);
             } else {
-
-            }}
+                sleep(500);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 28, 28, 28, 28, 3.0);
+                arm.setPower(0);
+                pin.setPosition(1);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -8, -8, -8, -8, 3.0);
+                arm.setPower(0.05);
+                encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, -16, 16, -16, 16, 1.5);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -6, 6, 6, -6, 2.0);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 56, 56, 56, 56, 6.0);
+                sleep(10000000);
+            }
+            }
         // Explain basic gain information via telemetry
 
         /* Use telemetry to display feedback on the driver station. We show the red, green, and blue
