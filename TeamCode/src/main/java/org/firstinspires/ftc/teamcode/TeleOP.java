@@ -94,9 +94,9 @@ public class TeleOP extends LinearOpMode {
             motor7.setPower(m7Power);
 
             if (gamepad2.right_bumper) {
-                C.setPosition(-0.4);
-            } else {
                 C.setPosition(0);
+            } else {
+                C.setPosition(0.4);
             } if (gamepad2.dpad_left) {
                 PL.setPosition(0);
             } else if (gamepad2.dpad_down){
