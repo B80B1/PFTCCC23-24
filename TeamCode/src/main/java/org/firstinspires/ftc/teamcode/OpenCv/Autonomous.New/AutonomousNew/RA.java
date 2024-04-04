@@ -27,37 +27,31 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.OpenCv.AutonomousNew;
+package org.firstinspires.ftc.teamcode.OpenCv.Autonomous.New.AutonomousNew;
+import static org.firstinspires.ftc.teamcode.OpenCv.Detectors.TPDetectR.Location.Left;
+import static org.firstinspires.ftc.teamcode.OpenCv.Detectors.TPDetectR.Location.Right;
 
 import android.app.Activity;
-import android.view.View;
-import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+import android.view.View;
+
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.MecanumDrive;
-import org.firstinspires.ftc.teamcode.OpenCv.TPDetectB;
+
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+
+import org.firstinspires.ftc.teamcode.OpenCv.Detectors.TPDetectR;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
-import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.Vector2d;
-import com.acmerobotics.roadrunner.ftc.Actions;
-import com.acmerobotics.roadrunner.ParallelAction;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
+
 
 /**
  * This is an example LinearOpMode that shows how to use a color sensor in a generic
@@ -82,9 +76,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this Op Mode to the Driver Station OpMode list
  */
-@Autonomous(name = "Blue Audience")
+@Autonomous(name = "Red Audience")
 
-public class BA extends LinearOpMode {
+public class RA extends LinearOpMode {
 
     OpenCvCamera webcam1;
     private static final int CAMERA_WIDTH = 1280; // width  of wanted camera resolution
@@ -93,6 +87,7 @@ public class BA extends LinearOpMode {
     public void encoderDrive(double rspeed, double fspeed,
                              double backleftInches, double backrightInches,
                              double frontleftInches, double frontrightInches, double timeoutS) {
+
 
         int newbackLeftTarget;
         int newbackRightTarget;
@@ -210,7 +205,7 @@ public class BA extends LinearOpMode {
     private DcMotor         frontleftDrive = null;
     private DcMotor         frontrightDrive = null;
     private DcMotor         arm = null;
-    private Servo pin;
+    private Servo           pin;
     private ElapsedTime     runtime = new ElapsedTime();
 
     // Calculate the COUNTS_PER_INCH for your specific drive train.
@@ -235,7 +230,7 @@ public class BA extends LinearOpMode {
     @Override public void runOpMode() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         OpenCvWebcam camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam 1"), cameraMonitorViewId);
-        TPDetectB detector = new TPDetectB(telemetry);
+        TPDetectR detector = new TPDetectR(telemetry);
         camera.setPipeline(detector);
         backleftDrive  = hardwareMap.get(DcMotor.class, "leftBack");
         backrightDrive = hardwareMap.get(DcMotor.class, "rightBack");
@@ -250,7 +245,7 @@ public class BA extends LinearOpMode {
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
-        // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
+        // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction //flips
         frontleftDrive.setDirection(DcMotor.Direction.REVERSE);
         frontrightDrive.setDirection(DcMotor.Direction.FORWARD);
         backleftDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -283,6 +278,8 @@ public class BA extends LinearOpMode {
         relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
 
 
+
+        // Wait for the start button to be pressed.
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
@@ -303,12 +300,10 @@ public class BA extends LinearOpMode {
             case Middle:
                 break;
         }
-        // Wait for the start button to be pressed.
-        waitForStart();
 
         // Loop until we are asked to stop
         while (opModeIsActive()) {
-            if (detector.location == TPDetectB.Location.Left) {
+            if (detector.location == Left) {
                 pin.setPosition(0.4);
                 arm.setPower(0.05);
                 encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, 5.5, -5.5, -5.5, 5.5, 1.5);
@@ -319,10 +314,10 @@ public class BA extends LinearOpMode {
                 encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -8, -8, -8, -8, 3.0);
                 arm.setPower(0.05);
                 encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, -16, 16, -16, 16, 1.5);
-                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -6, 6, 6, -6, 2.0);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 6, -6, -6, 6, 2.0);
                 encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 56, 56, 56, 56, 6.0);
                 sleep(10000000);
-            } else if (detector.location == TPDetectB.Location.Right) {
+            } else if (detector.location == Right) {
                 encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, -5.5, 5.5, 5.5, -5.5, 1.5);
                 sleep(500);
                 encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 23, 23, 23, 23, 3.0);
@@ -331,7 +326,7 @@ public class BA extends LinearOpMode {
                 encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -8, -8, -8, -8, 3.0);
                 arm.setPower(0.05);
                 encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, -16, 16, -16, 16, 1.5);
-                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -6, 6, 6, -6, 2.0);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 6, -6, -6, 6, 2.0);
                 encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 56, 56, 56, 56, 6.0);
                 sleep(10000000);
             } else {
@@ -342,11 +337,11 @@ public class BA extends LinearOpMode {
                 encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -8, -8, -8, -8, 3.0);
                 arm.setPower(0.05);
                 encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, -16, 16, -16, 16, 1.5);
-                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -6, 6, 6, -6, 2.0);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 6, -6, -6, 6, 2.0);
                 encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 56, 56, 56, 56, 6.0);
                 sleep(10000000);
             }
-            }
+        }
         // Explain basic gain information via telemetry
 
         /* Use telemetry to display feedback on the driver station. We show the red, green, and blue

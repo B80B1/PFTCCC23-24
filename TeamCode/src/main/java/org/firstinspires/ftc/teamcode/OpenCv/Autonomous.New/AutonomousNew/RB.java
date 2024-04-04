@@ -27,9 +27,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.OpenCv.AutonomousNew;
-import static org.firstinspires.ftc.teamcode.OpenCv.TPDetectR.Location.Left;
-import static org.firstinspires.ftc.teamcode.OpenCv.TPDetectR.Location.Right;
+package org.firstinspires.ftc.teamcode.OpenCv.Autonomous.New.AutonomousNew;
+import static org.firstinspires.ftc.teamcode.OpenCv.Detectors.TPDetectR.Location.Left;
+import static org.firstinspires.ftc.teamcode.OpenCv.Detectors.TPDetectR.Location.Right;
 
 import android.app.Activity;
 
@@ -46,8 +46,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 
-import org.firstinspires.ftc.teamcode.OpenCv.TPDetectB;
-import org.firstinspires.ftc.teamcode.OpenCv.TPDetectR;
+import org.firstinspires.ftc.teamcode.OpenCv.Detectors.TPDetectR;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
