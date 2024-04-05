@@ -15,7 +15,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 @Config
 public class TPDetectB extends OpenCvPipeline {
-    public static boolean Detect_Red = true;
+    public static boolean Detect_Blue = true;
     public static double MinimumVal = 100;
     public static double MaximumVal = 255;
     public static double MinimumBHue = 100;
@@ -52,8 +52,10 @@ public class TPDetectB extends OpenCvPipeline {
         Scalar MinRH = new Scalar(MinimumRHHue,MinimumVal,MinimumVal);
         Scalar MaxRH = new Scalar(MaximumRHHue,MaximumVal,MaximumVal);
 
-        if (Detect_Red) {
+        if (Detect_Blue) {
+            Mat matB = mat.clone();
             Core.inRange(mat, MinB, MaxB, mat);
+            Core.bitwise_or(matB, matB, mat);
         } else {
             Mat mat1 = mat.clone();
             Mat mat2 = mat.clone();
@@ -66,9 +68,9 @@ public class TPDetectB extends OpenCvPipeline {
         Mat Right = mat.submat(RightArea);
         Mat Middle = mat.submat(MiddleArea);
 
-        double leftVal = Core.sumElems(Left).val[1];
-        double rightVal = Core.sumElems(Right).val[1];
-        double middleVal = Core.sumElems(Middle).val[1];
+        double leftVal = Core.sumElems(Left).val[0];
+        double rightVal = Core.sumElems(Right).val[0];
+        double middleVal = Core.sumElems(Middle).val[0];
 
         telemetry.addData("Left Raw Value", leftVal);
         telemetry.addData("Right Raw Value", rightVal);
