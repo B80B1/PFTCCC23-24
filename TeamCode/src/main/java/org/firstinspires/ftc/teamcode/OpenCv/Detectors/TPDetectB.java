@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.OpenCv;
+package org.firstinspires.ftc.teamcode.OpenCv.Detectors;
 
 import static org.opencv.imgproc.Imgproc.COLOR_HSV2RGB;
 
@@ -14,8 +14,8 @@ import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 @Config
-public class TPDetectR extends OpenCvPipeline {
-    public static boolean Detect_Red = true;
+public class TPDetectB extends OpenCvPipeline {
+    public static boolean Detect_Blue = true;
     public static double MinimumVal = 100;
     public static double MaximumVal = 255;
     public static double MinimumBHue = 100;
@@ -34,10 +34,10 @@ public class TPDetectR extends OpenCvPipeline {
         Middle
     }
     public Location location;
-    static final Rect LeftArea = new Rect(new Point(1,465), new Point(41,389));
-    static final Rect MiddleArea = new Rect(new Point(622, 406), new Point(690, 365));
-    static final Rect RightArea = new Rect(new Point(1230,570), new Point(1276,636));
-    public TPDetectR(Telemetry t){
+    static final Rect LeftArea = new Rect(new Point(10,100), new Point(105,200));
+    static final Rect RightArea = new Rect(new Point(10, 200), new Point(205, 200));
+    static final Rect MiddleArea = new Rect(new Point(220,100), new Point(310,200));
+    public TPDetectB(Telemetry t){
         telemetry = t;
     }
 
@@ -52,8 +52,10 @@ public class TPDetectR extends OpenCvPipeline {
         Scalar MinRH = new Scalar(MinimumRHHue,MinimumVal,MinimumVal);
         Scalar MaxRH = new Scalar(MaximumRHHue,MaximumVal,MaximumVal);
 
-        if (!Detect_Red) {
+        if (Detect_Blue) {
+            Mat matB = mat.clone();
             Core.inRange(mat, MinB, MaxB, mat);
+            Core.bitwise_or(matB, matB, mat);
         } else {
             Mat mat1 = mat.clone();
             Mat mat2 = mat.clone();
@@ -84,7 +86,7 @@ public class TPDetectR extends OpenCvPipeline {
         } else if (rightVal > middleVal && rightVal > leftVal) {
                 location = Location.Right;
                 telemetry.addData("Prop at", "Left");
-        } else if (middleVal >= rightVal && middleVal >= leftVal) {
+        } else if (middleVal > rightVal && middleVal >= leftVal) {
                 location = Location.Middle;
                 telemetry.addData("Prop at", "Middle");
         }
@@ -93,7 +95,7 @@ public class TPDetectR extends OpenCvPipeline {
 
         Imgproc.cvtColor(mat, mat, COLOR_HSV2RGB);
         Scalar pixelColor = new Scalar(255, 255, 255);
-        Scalar propColor = new Scalar(255, 0, 0);
+        Scalar propColor = new Scalar(0, 0, 255);
 
         Imgproc.rectangle(mat, LeftArea, location == Location.Left? pixelColor:propColor);
         Imgproc.rectangle(mat, RightArea, location == Location.Right? pixelColor:propColor);

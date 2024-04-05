@@ -1,15 +1,15 @@
-package org.firstinspires.ftc.teamcode.OpenCv.Autonomous.RRFailure;
+package org.firstinspires.ftc.teamcode.OpenCv.Autonomous.New.AutonomousNew;
 
-import static org.firstinspires.ftc.teamcode.OpenCv.Detectors.TPDetectR.Location.Left;
-import static org.firstinspires.ftc.teamcode.OpenCv.Detectors.TPDetectR.Location.Right;
+import static org.firstinspires.ftc.teamcode.OpenCv.Detectors.TPDetectB.Location.Left;
+import static org.firstinspires.ftc.teamcode.OpenCv.Detectors.TPDetectB.Location.Right;
 
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.OpenCv.Detectors.TPDetectB;
 import org.firstinspires.ftc.teamcode.tuning.MecanumDrive;
-import org.firstinspires.ftc.teamcode.OpenCv.Detectors.TPDetectR;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -26,7 +26,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Autonomous
-public class RedBS extends LinearOpMode {
+public class BB extends LinearOpMode {
 
     OpenCvCamera webcam1;
     private static final int CAMERA_WIDTH = 1280; // width  of wanted camera resolution
@@ -124,7 +124,7 @@ public class RedBS extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(60, 12.5, Math.toRadians(90)));
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         OpenCvWebcam camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam 1"), cameraMonitorViewId);
-        TPDetectR detector = new TPDetectR(telemetry);
+        TPDetectB detector = new TPDetectB(telemetry);
         camera.setPipeline(detector);
         Pin pin = new Pin(hardwareMap);
         Arm arm = new Arm(hardwareMap);
@@ -215,6 +215,6 @@ public class RedBS extends LinearOpMode {
                     new SequentialAction(
                             trajectoryChosenAction1,
                             trajectoryEnd));
-            }
+        }
     }
-    }
+}

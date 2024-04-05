@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.OpenCv;
+package org.firstinspires.ftc.teamcode.OpenCv.Detectors;
 
 /*Skip to content
         Using Gmail with screen readers

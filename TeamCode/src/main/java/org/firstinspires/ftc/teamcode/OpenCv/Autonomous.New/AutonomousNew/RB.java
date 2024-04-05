@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.OpenCv.Autonomous.RRFailure;
+package org.firstinspires.ftc.teamcode.OpenCv.Autonomous.New.AutonomousNew;
 
 import static org.firstinspires.ftc.teamcode.OpenCv.Detectors.TPDetectR.Location.Left;
 import static org.firstinspires.ftc.teamcode.OpenCv.Detectors.TPDetectR.Location.Right;
@@ -26,7 +26,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Autonomous
-public class RedBS extends LinearOpMode {
+public class RB extends LinearOpMode {
 
     OpenCvCamera webcam1;
     private static final int CAMERA_WIDTH = 1280; // width  of wanted camera resolution
@@ -215,6 +215,6 @@ public class RedBS extends LinearOpMode {
                     new SequentialAction(
                             trajectoryChosenAction1,
                             trajectoryEnd));
-            }
+        }
     }
-    }
+}
