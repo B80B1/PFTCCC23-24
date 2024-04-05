@@ -161,11 +161,36 @@ public class BB extends LinearOpMode {
 
         while (opModeIsActive()) {
             if (detector.location == Left) {
-
+                pin.setPosition(0.4);
+                arm.setPower(0.05);
+                encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, 5.5, -5.5, -5.5, 5.5, 1.5);
+                sleep(25);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 23, 23, 23, 23, 3.0);
+                pin.setPosition(1);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -8, -8, -8, -8, 3.0);
+                arm.setPower(0);
+                sleep(10000000);
             } else if (detector.location == Right) {
-
+                pin.setPosition(0.4);
+                arm.setPower(0.05);
+                encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, -5.5, 5.5, 5.5, -5.5, 1.5);
+                sleep(25);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 23, 23, 23, 23, 3.0);
+                arm.setPower(0);
+                pin.setPosition(1);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -8, -8, -8, -8, 3.0);
+                arm.setPower(0.05);
+                arm.setPower(0);
+                sleep(10000000);
             } else {
-
+                pin.setPosition(0.4);
+                arm.setPower(0.05);
+                sleep(25);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 26, 26, 26, 26, 3.0);
+                pin.setPosition(1);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -8, -8, -8, -8, 3.0);
+                arm.setPower(0);
+                sleep(10000000);
             }
 
         }

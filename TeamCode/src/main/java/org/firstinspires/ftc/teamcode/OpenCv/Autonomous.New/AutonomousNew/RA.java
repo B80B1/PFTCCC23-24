@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.OpenCv.Detectors.TPDetectB;
 import org.firstinspires.ftc.teamcode.tuning.MecanumDrive;
 import org.firstinspires.ftc.teamcode.OpenCv.Detectors.TPDetectR;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -159,11 +160,36 @@ public class RA extends LinearOpMode {
 
         while (opModeIsActive()) {
             if (detector.location == Left) {
-
+                pin.setPosition(0.4);
+                arm.setPower(0.05);
+                encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, 5.5, -5.5, -5.5, 5.5, 1.5);
+                sleep(25);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 23, 23, 23, 23, 3.0);
+                pin.setPosition(1);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -8, -8, -8, -8, 3.0);
+                arm.setPower(0);
+                sleep(10000000);
             } else if (detector.location == Right) {
-
+                pin.setPosition(0.4);
+                arm.setPower(0.05);
+                encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, -5.5, 5.5, 5.5, -5.5, 1.5);
+                sleep(25);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 23, 23, 23, 23, 3.0);
+                arm.setPower(0);
+                pin.setPosition(1);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -8, -8, -8, -8, 3.0);
+                arm.setPower(0.05);
+                arm.setPower(0);
+                sleep(10000000);
             } else {
-
+                pin.setPosition(0.4);
+                arm.setPower(0.05);
+                sleep(25);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 26, 26, 26, 26, 3.0);
+                pin.setPosition(1);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -8, -8, -8, -8, 3.0);
+                arm.setPower(0);
+                sleep(10000000);
             }
         }
     }
