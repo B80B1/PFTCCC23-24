@@ -23,6 +23,7 @@ import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -135,6 +136,18 @@ public class RB extends LinearOpMode {
         TPDetectR detector = new TPDetectR(telemetry);
         camera.setPipeline(detector);
 
+        pin = hardwareMap.get(Servo.class, "Intake");
+        arm = hardwareMap.get(DcMotor.class, "arm");
+        frontleftDrive = hardwareMap.get(DcMotor.class, "leftFront"); //frontleft, port 0
+        frontrightDrive = hardwareMap.get(DcMotor.class, "rightFront");  //frontright, port 1
+        backleftDrive = hardwareMap.get(DcMotor.class, "leftBack"); //backleft, port 3
+        backrightDrive = hardwareMap.get(DcMotor.class, "rightBack");  //backright, port 2
+
+        frontleftDrive.setDirection(DcMotor.Direction.REVERSE);
+        frontrightDrive.setDirection(DcMotor.Direction.FORWARD);
+        backleftDrive.setDirection(DcMotor.Direction.REVERSE);
+        backrightDrive.setDirection(DcMotor.Direction.FORWARD);
+
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() {
@@ -158,27 +171,25 @@ public class RB extends LinearOpMode {
                 break;
         }
 
+
+
         while (opModeIsActive()) {
-            if (detector.location == Left) {
+            if ((detector.location == Left) == true) {
                 pin.setPosition(0.4);
                 arm.setPower(0.05);
-                encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, 5.5, -5.5, -5.5, 5.5, 1.5);
-                sleep(25);
-                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 23, 23, 23, 23, 3.0);
+                encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, 2, -2, -2, 2, 1.5);
+                sleep(250);
+                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 8, 8, 8, 8, 3.0);
                 pin.setPosition(1);
-                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -8, -8, -8, -8, 3.0);
                 arm.setPower(0);
                 sleep(10000000);
-            } else if (detector.location == Right) {
+            } else if ((detector.location == Right) == true) {
                 pin.setPosition(0.4);
                 arm.setPower(0.05);
-                encoderDrive(F_DRIVE_SPEED/1.5, R_DRIVE_SPEED/1.5, -5.5, 5.5, 5.5, -5.5, 1.5);
-                sleep(25);
-                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, 23, 23, 23, 23, 3.0);
-                arm.setPower(0);
+                encoderDrive(F_DRIVE_SPEED/3, R_DRIVE_SPEED/3, 3, -3, -3, 3, 1.5);
+                sleep(250);
+                encoderDrive(F_DRIVE_SPEED/3, R_DRIVE_SPEED/3, 10, 10, 10, 10, 3.0);
                 pin.setPosition(1);
-                encoderDrive(F_DRIVE_SPEED, R_DRIVE_SPEED, -8, -8, -8, -8, 3.0);
-                arm.setPower(0.05);
                 arm.setPower(0);
                 sleep(10000000);
             } else {
@@ -191,6 +202,7 @@ public class RB extends LinearOpMode {
                 arm.setPower(0);
                 sleep(10000000);
             }
+            encoderDrive(F_DRIVE_SPEED,R_DRIVE_SPEED, 10, 10, 10, -10, 5.0);
         }
     }
 }
