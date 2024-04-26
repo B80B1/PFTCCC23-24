@@ -19,16 +19,16 @@ public class TeleOpTutorial extends LinearOpMode
         leftBack = hardwareMap.dcMotor.get("leftBack");
         rightBack = hardwareMap.dcMotor.get("rightBack");
 
+        leftBack.setDirection(DcMotor.Direction.REVERSE);
         leftFront.setDirection(DcMotor.Direction.REVERSE);
-        rightFront.setDirection(DcMotor.Direction.REVERSE);
 
         waitForStart();
 
         while(opModeIsActive()) {
 
             leftFront.setPower(-gamepad1.left_stick_y);
-            rightFront.setPower(-gamepad1.left_stick_y);
-            leftBack.setPower(-gamepad1.right_stick_y);
+            rightFront.setPower(-gamepad1.right_stick_y);
+            leftBack.setPower(-gamepad1.left_stick_y);
             rightBack.setPower(-gamepad1.right_stick_y);
 
             idle();
