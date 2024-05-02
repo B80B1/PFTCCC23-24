@@ -39,15 +39,11 @@ public class TeleOpTutorial extends LinearOpMode {
             rightBack.setPower(-gamepad1.right_stick_y);
 
             if (gamepad1.right_bumper) {
-                bluearm.setPosition(0.5);
+                bluearm.setPosition(0.2);
+                orangearm.setPosition(0.0);
             } else {
                 bluearm.setPosition(0.0);
-                if (gamepad1.right_bumper) {
-                    orangearm.setPosition(-0.5);
-                } else {
-                    orangearm.setPosition(0.0);
-                    idle();
-                }
+                orangearm.setPosition(0.2);
             }
         }
     }
